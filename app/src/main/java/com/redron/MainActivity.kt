@@ -2,46 +2,47 @@ package com.redron
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import com.redron.ui.theme.MyFirstAppTheme
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.redron.data.JokesGenerator
+import com.redron.databinding.ActivityMainBinding
+import com.redron.recycler.JokesAdapter
 
 class MainActivity : ComponentActivity() {
+
+    private lateinit var binding: ActivityMainBinding
+    private val adapter = JokesAdapter()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        setContent {
-            MyFirstAppTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Redron",
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                }
-            }
-        }
-    }
-}
 
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    MyFirstAppTheme {
-        Greeting("Android")
+        val generator = JokesGenerator()
+        val someData = generator.generate()
+
+        adapter.setNewData(someData)
+        createRecyclerViewList()
     }
+
+    private fun createRecyclerViewList() {
+        binding.recyclerView.adapter = adapter
+        binding.recyclerView.layoutManager = LinearLayoutManager(this)
+
+    }
+
+
+//    private fun createList() {
+//        binding.linearLayout.apply {
+//            for (i in 0 .. 100) {
+//                val btn = Button(this@MainActivity).apply {
+//                    text = "Button $i"
+//                    setOnClickListener {
+//                        Toast.makeText(this@MainActivity, "$i pressed", Toast.LENGTH_SHORT).show()
+//                    }
+//                }
+//                addView(btn)
+//            }
+//        }
+//    }
 }
