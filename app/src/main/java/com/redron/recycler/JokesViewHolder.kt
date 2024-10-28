@@ -9,5 +9,6 @@ class JokesViewHolder(val binding: JokeItemBinding) : RecyclerView.ViewHolder(bi
     fun bind(joke: Joke) {
         binding.textViewQuestion.text = joke.jokeQuestion
         binding.textViewAnswer.text = joke.jokeAnswer
+        binding.textViewCategory.text = joke.category
     }
 }
