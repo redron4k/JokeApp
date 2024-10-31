@@ -3,21 +3,15 @@ package com.redron.recycler
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.redron.data.Joke
 import com.redron.databinding.JokeItemBinding
 import com.redron.recycler.util.JokeDiffUtilCallback
+import com.redron.recycler.util.JokeItemCallback
 
-class JokesAdapter : RecyclerView.Adapter<JokesViewHolder>() {
-
-    private var data = emptyList<Joke>()
-
-    fun setNewData(newData: List<Joke>) {
-        val diffUtilCallback = JokeDiffUtilCallback(data, newData)
-        val calculatedDiff = DiffUtil.calculateDiff(diffUtilCallback)
-        data = newData
-        calculatedDiff.dispatchUpdatesTo(this)
-    }
+class JokesListAdapter(itemCallback: JokeItemCallback) :
+    ListAdapter<Joke, JokesViewHolder>(itemCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): JokesViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -26,9 +20,9 @@ class JokesAdapter : RecyclerView.Adapter<JokesViewHolder>() {
         return JokesViewHolder(binding)
     }
 
-    override fun getItemCount() = data.size
+    override fun getItemCount() = currentList.size
 
     override fun onBindViewHolder(holder: JokesViewHolder, position: Int) {
-        holder.bind(data[position])
+        holder.bind(currentList[position])
     }
 }
