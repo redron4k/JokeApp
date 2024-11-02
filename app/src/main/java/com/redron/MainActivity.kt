@@ -2,10 +2,8 @@ package com.redron
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.redron.data.JokesGenerator
 import com.redron.databinding.ActivityMainBinding
-import com.redron.recycler.JokesAdapter
 import com.redron.recycler.JokesListAdapter
 import com.redron.recycler.util.JokeItemCallback
 

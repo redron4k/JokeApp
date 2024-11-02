@@ -2,12 +2,9 @@ package com.redron.recycler
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
-import androidx.recyclerview.widget.RecyclerView
 import com.redron.data.Joke
 import com.redron.databinding.JokeItemBinding
-import com.redron.recycler.util.JokeDiffUtilCallback
 import com.redron.recycler.util.JokeItemCallback
 
 class JokesListAdapter(itemCallback: JokeItemCallback) :

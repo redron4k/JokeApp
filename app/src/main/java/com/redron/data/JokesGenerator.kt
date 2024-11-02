@@ -37,7 +37,7 @@ class JokesGenerator {
         )
     )
 
-    public fun generate(): List<Joke> {
+    fun generate(): List<Joke> {
         return jokesList.shuffled()
     }
 }
