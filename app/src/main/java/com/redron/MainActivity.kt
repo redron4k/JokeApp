@@ -2,46 +2,28 @@ package com.redron
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import com.redron.ui.theme.MyFirstAppTheme
+import com.redron.data.JokesGenerator
+import com.redron.databinding.ActivityMainBinding
+import com.redron.recycler.JokesListAdapter
+import com.redron.recycler.util.JokeItemCallback
 
 class MainActivity : ComponentActivity() {
+
+    private lateinit var binding: ActivityMainBinding
+    private val itemCallback = JokeItemCallback()
+    private val adapter = JokesListAdapter(itemCallback)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        setContent {
-            MyFirstAppTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Redron",
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                }
-            }
-        }
-    }
-}
 
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    MyFirstAppTheme {
-        Greeting("Android")
+        val generator = JokesGenerator()
+        val jokes = generator.generate()
+
+        adapter.submitList(jokes)
+
+        binding.recyclerView.adapter = adapter
     }
 }
