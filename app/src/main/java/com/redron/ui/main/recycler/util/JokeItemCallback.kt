@@ -1,4 +1,4 @@
-package com.redron.recycler.util
+package com.redron.ui.main.recycler.util
 
 import androidx.recyclerview.widget.DiffUtil
 import com.redron.data.Joke

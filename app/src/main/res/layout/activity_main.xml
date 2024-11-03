@@ -8,7 +8,7 @@
     android:background="@color/purple_100"
     android:paddingHorizontal="20dp"
     android:paddingVertical="6dp"
-    tools:context=".MainActivity">
+    tools:context=".ui.main.MainActivity">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"

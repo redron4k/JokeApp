@@ -1,4 +1,4 @@
-package com.redron.recycler
+package com.redron.ui.main.recycler
 
 import androidx.recyclerview.widget.RecyclerView
 import com.redron.data.Joke

@@ -1,7 +1,7 @@
 package com.redron.data
 
-class JokesGenerator {
-    private val jokesList = listOf<Joke>(
+object JokesGenerator {
+    private val jokesList = listOf(
         Joke(1,
             "Что будет, если ворона сядет на оголённые провода?",
             "Электро кар", "Каламбуры"
@@ -30,6 +30,16 @@ class JokesGenerator {
             "Как называется человек, который ворует собак?",
             "Договор", "Каламбуры"
         ),
+        Joke(8,
+            "Лиам весь вечер просидел в пабе и пил.",
+            "Наконец, бармен сказал, что паб закрывается, и Лиаму пришлось выметаться вон. Он встал и тут же рухнул на пол. Кое-как он выполз наружу, и, в надежде, что свежий ветер его отрезвит, снова попытался встать и опять упал на земь.\n" +
+                    "И вот он пополз домой. Приполз. Снова встал на ноги, открыл дверь и снова упал. Прополз до кровати, поднялся опять, и финально обвалился в постель, после чего и заснул.\n" +
+                    "Утром его будит жена:\n" +
+                    "- Опять ты вчера нажрался, скотина такая!\n" +
+                    "- Но как ты узнала? - ошарашено спрашивает Лиам.\n" +
+                    "- Звонили из паба. Ты забыл там свою чертову кресло-каталку!",
+            "Черные"
+        ),
         Joke(0,
             "Test Long Answer Joke",
             "AnswerAnswerAnswerAnswerAnswerAnswerAnswerAnswerAnswerAnswerAnswerAnswer",
@@ -37,7 +47,11 @@ class JokesGenerator {
         )
     )
 
+    val jokes = mutableListOf<Joke>()
+
     fun generate(): List<Joke> {
-        return jokesList.shuffled()
+        jokes.clear()
+        jokes.addAll(jokesList.shuffled())
+        return jokes
     }
 }
