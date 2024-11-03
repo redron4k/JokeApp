@@ -5,16 +5,16 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
-import androidx.activity.enableEdgeToEdge
-import com.redron.R
+import androidx.lifecycle.ViewModelProvider
 import com.redron.data.Joke
 import com.redron.data.JokesGenerator
 import com.redron.databinding.ActivitySingleJokeBinding
+import com.redron.ui.JokeViewModelFactory
 
 class SingleJokeActivity : ComponentActivity() {
 
     private lateinit var binding: ActivitySingleJokeBinding
-    private val generator = JokesGenerator
+    private lateinit var viewModel: SingleJokeViewModel
     private var position: Int = -1
 
     companion object {
@@ -33,17 +33,23 @@ class SingleJokeActivity : ComponentActivity() {
         binding = ActivitySingleJokeBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        initViewModel()
         handleExtra()
     }
 
+    private fun initViewModel() {
+        val factory = JokeViewModelFactory(JokesGenerator)
+        viewModel = ViewModelProvider(this, factory)[SingleJokeViewModel::class.java]
+        viewModel.jokes.observe(this, ::setUpJoke)
+        viewModel.error.observe(this) {
+            Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
+        }
+    }
+
+
     private fun handleExtra() {
         position = intent.getIntExtra(JOKE_POSITION_EXTRA, -1)
-        if (position == -1) {
-            handleError()
-        } else {
-            val item = generator.jokes[position]
-            setUpJoke(item)
-        }
+        viewModel.loadSingleJoke(position)
     }
 
     private fun setUpJoke(item: Joke) {
@@ -53,10 +59,4 @@ class SingleJokeActivity : ComponentActivity() {
             textViewCategory.text = item.category
         }
     }
-
-    private fun handleError() {
-        Toast.makeText(this, "Unexpected position error", Toast.LENGTH_SHORT).show()
-        finish()
-    }
-
 }
