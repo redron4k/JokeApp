@@ -8,19 +8,15 @@ import com.redron.data.JokesGenerator
 import com.redron.databinding.ActivityMainBinding
 import com.redron.ui.JokeViewModelFactory
 import com.redron.ui.main.recycler.JokesListAdapter
-import com.redron.ui.main.recycler.util.JokeItemCallback
 import com.redron.ui.single_joke.SingleJokeActivity
 
 class MainActivity : ComponentActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var viewModel: JokesListViewModel
-
-    private val itemCallback = JokeItemCallback()
-    private val adapter = JokesListAdapter(itemCallback) {
-        startActivity(SingleJokeActivity.getInstance(this, it))
+    private val adapter = JokesListAdapter {
+        startActivity(SingleJokeActivity.getInstance(this, viewModel.getJokeId(it)))
     }
-    private val generator = JokesGenerator
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -1,18 +1,17 @@
 package com.redron.ui.main.recycler
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.redron.data.Joke
 import com.redron.databinding.JokeItemBinding
 import com.redron.ui.main.recycler.util.JokeItemCallback
 
-class JokesListAdapter(itemCallback: JokeItemCallback,
-    private val clickListener: (Int) -> Unit) :
-    ListAdapter<Joke, JokesViewHolder>(itemCallback) {
+class JokesListAdapter(
+    private val clickListener: (Int) -> Unit
+) :
+    ListAdapter<Joke, JokesViewHolder>(JokeItemCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): JokesViewHolder {
         val inflater = LayoutInflater.from(parent.context)

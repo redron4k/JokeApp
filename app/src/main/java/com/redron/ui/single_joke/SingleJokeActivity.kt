@@ -10,20 +10,21 @@ import com.redron.data.Joke
 import com.redron.data.JokesGenerator
 import com.redron.databinding.ActivitySingleJokeBinding
 import com.redron.ui.JokeViewModelFactory
+import java.time.ZoneId
 
 class SingleJokeActivity : ComponentActivity() {
 
     private lateinit var binding: ActivitySingleJokeBinding
     private lateinit var viewModel: SingleJokeViewModel
-    private var position: Int = -1
+    private var jokeId: Int = -1
 
     companion object {
 
-        private const val JOKE_POSITION_EXTRA = "JOKE_POSITION"
+        private const val JOKE_ID_EXTRA = "JOKE_ID"
 
-        fun getInstance(context: Context, position: Int): Intent {
+        fun getInstance(context: Context, jokeId: Int): Intent {
             return Intent(context, SingleJokeActivity::class.java).apply {
-                putExtra(JOKE_POSITION_EXTRA, position)
+                putExtra(JOKE_ID_EXTRA, jokeId)
             }
         }
     }
@@ -48,8 +49,8 @@ class SingleJokeActivity : ComponentActivity() {
 
 
     private fun handleExtra() {
-        position = intent.getIntExtra(JOKE_POSITION_EXTRA, -1)
-        viewModel.loadSingleJoke(position)
+        jokeId = intent.getIntExtra(JOKE_ID_EXTRA, -1)
+        viewModel.loadSingleJoke(jokeId)
     }
 
     private fun setUpJoke(item: Joke) {

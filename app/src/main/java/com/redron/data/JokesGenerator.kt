@@ -54,4 +54,8 @@ object JokesGenerator {
         jokes.addAll(jokesList.shuffled())
         return jokes
     }
+
+    fun getJoke(id: Int): Joke? {
+        return jokesList.find { it.id == id }
+    }
 }

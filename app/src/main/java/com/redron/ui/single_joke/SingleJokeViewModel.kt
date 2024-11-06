@@ -13,11 +13,11 @@ class SingleJokeViewModel(private val generator: JokesGenerator) : ViewModel() {
     private val _error = MutableLiveData<String>()
     val error: LiveData<String> = _error
 
-    fun loadSingleJoke(position: Int) {
-        if (position == -1) {
-            _error.value = "Unexpeted position error"
+    fun loadSingleJoke(jokeId: Int) {
+        if (jokeId == -1) {
+            _error.value = "Unexpeted id error"
         } else {
-            (generator.jokes[position]).let {
+            (generator.getJoke(jokeId)).let {
                 _jokes.value = it
             }
         }
