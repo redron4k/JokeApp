@@ -4,7 +4,6 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.redron.R
 import com.redron.data.Joke
 import com.redron.databinding.JokeItemBinding
 import com.redron.ui.main.recycler.util.JokeItemCallback

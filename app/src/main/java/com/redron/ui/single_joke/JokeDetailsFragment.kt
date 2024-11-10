@@ -1,6 +1,5 @@
 package com.redron.ui.single_joke
 
-import androidx.fragment.app.viewModels
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -13,24 +12,17 @@ import com.redron.R
 import com.redron.data.Joke
 import com.redron.data.JokesGenerator
 import com.redron.databinding.FragmentJokeDetailsBinding
-import com.redron.databinding.FragmentListBinding
 import com.redron.ui.JokeViewModelFactory
-import com.redron.ui.main.JokesListViewModel
 
 class JokeDetailsFragment : Fragment() {
 
-    companion object {
-        fun newInstance() = JokeDetailsFragment()
-    }
-
-    private lateinit var viewModel: JokeDetailsViewModel
     private lateinit var binding: FragmentJokeDetailsBinding
+    private lateinit var viewModel: JokeDetailsViewModel
     private val args: JokeDetailsFragmentArgs by navArgs()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        binding = FragmentJokeDetailsBinding.inflate(layoutInflater)
         initViewModel()
     }
 
@@ -44,6 +36,7 @@ class JokeDetailsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        binding = FragmentJokeDetailsBinding.bind(view)
         viewModel.loadSingleJoke(args.jokeID)
     }
 
@@ -57,7 +50,7 @@ class JokeDetailsFragment : Fragment() {
     }
 
     private fun setUpJoke(item: Joke) {
-        with (binding) {
+        with(binding) {
             textViewQuestion.text = item.jokeQuestion
             textViewAnswer.text = item.jokeAnswer
             textViewCategory.text = item.category
