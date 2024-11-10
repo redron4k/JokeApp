@@ -15,6 +15,7 @@ class JokesListViewModel(private val generator: JokesGenerator) : ViewModel() {
 
     fun generateJokes() {
         _jokes.value = generator.generate()
+        println("!!!! generated")
     }
 
     fun getJokeId(position: Int): Int {

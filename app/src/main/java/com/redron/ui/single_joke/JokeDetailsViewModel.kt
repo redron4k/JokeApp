@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import com.redron.data.Joke
 import com.redron.data.JokesGenerator
 
-class SingleJokeViewModel(private val generator: JokesGenerator) : ViewModel() {
+class JokeDetailsViewModel(private val generator: JokesGenerator) : ViewModel() {
     private val _jokes = MutableLiveData<Joke>()
     val jokes: LiveData<Joke> = _jokes
 

@@ -10,5 +10,6 @@ class JokesViewHolder(private val binding: JokeItemBinding) : RecyclerView.ViewH
         binding.textViewQuestion.text = joke.jokeQuestion
         binding.textViewAnswer.text = joke.jokeAnswer
         binding.textViewCategory.text = joke.category
+        println("!!! $joke.id binded")
     }
 }

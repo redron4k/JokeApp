@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.redron.R
 import com.redron.data.Joke
 import com.redron.databinding.JokeItemBinding
 import com.redron.ui.main.recycler.util.JokeItemCallback
@@ -16,6 +17,7 @@ class JokesListAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): JokesViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         val binding = JokeItemBinding.inflate(inflater, parent, false)
+        println("!!! ViewHolder created")
         return JokesViewHolder(binding).apply {
             binding.root.setOnClickListener {
                 handlePersonClick(bindingAdapterPosition)
@@ -27,6 +29,7 @@ class JokesListAdapter(
 
     override fun onBindViewHolder(holder: JokesViewHolder, position: Int) {
         holder.bind(currentList[position])
+        println("!!!! onBindViewHolder")
     }
 
     private fun handlePersonClick(position: Int) {
