@@ -15,7 +15,7 @@ class JokeDetailsViewModel(private val generator: JokesGenerator) : ViewModel() 
 
     fun loadSingleJoke(jokeId: Int) {
         if (jokeId == -1) {
-            _error.value = "Unexpeted id error"
+            _error.value = "Unexpected id error"
         } else {
             (generator.getJoke(jokeId)).let {
                 _jokes.value = it

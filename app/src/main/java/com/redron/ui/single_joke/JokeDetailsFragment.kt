@@ -6,7 +6,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewmodel.ViewModelInitializer
 import androidx.navigation.fragment.navArgs
 import com.redron.R
 import com.redron.data.Joke
@@ -17,7 +19,20 @@ import com.redron.ui.JokeViewModelFactory
 class JokeDetailsFragment : Fragment() {
 
     private lateinit var binding: FragmentJokeDetailsBinding
-    private lateinit var viewModel: JokeDetailsViewModel
+
+    private val viewModel: JokeDetailsViewModel by viewModels {
+        ViewModelProvider.Factory.from(
+            ViewModelInitializer(
+                clazz = JokeDetailsViewModel::class.java,
+                initializer = {
+                    JokeDetailsViewModel(
+                        JokesGenerator
+                    )
+                }
+            )
+        )
+        JokeViewModelFactory(JokesGenerator)
+    }
     private val args: JokeDetailsFragmentArgs by navArgs()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,19 +45,17 @@ class JokeDetailsFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        return inflater.inflate(R.layout.fragment_joke_details, container, false)
+        val view = inflater.inflate(R.layout.fragment_joke_details, container, false)
+        binding = FragmentJokeDetailsBinding.bind(view)
+        return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        binding = FragmentJokeDetailsBinding.bind(view)
         viewModel.loadSingleJoke(args.jokeID)
     }
 
     private fun initViewModel() {
-        val factory = JokeViewModelFactory(JokesGenerator)
-        viewModel = ViewModelProvider(this, factory)[JokeDetailsViewModel::class.java]
         viewModel.jokes.observe(this, ::setUpJoke)
         viewModel.error.observe(this) {
             Toast.makeText(activity, it, Toast.LENGTH_SHORT).show()
