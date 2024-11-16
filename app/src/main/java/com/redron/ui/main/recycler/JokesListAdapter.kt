@@ -16,22 +16,12 @@ class JokesListAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): JokesViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         val binding = JokeItemBinding.inflate(inflater, parent, false)
-        return JokesViewHolder(binding).apply {
-            binding.root.setOnClickListener {
-                handlePersonClick(bindingAdapterPosition)
-            }
-        }
+        return JokesViewHolder(binding, clickListener)
     }
 
     override fun getItemCount() = currentList.size
 
     override fun onBindViewHolder(holder: JokesViewHolder, position: Int) {
         holder.bind(currentList[position])
-    }
-
-    private fun handlePersonClick(position: Int) {
-        if (position != RecyclerView.NO_POSITION) {
-            clickListener(position)
-        }
     }
 }
