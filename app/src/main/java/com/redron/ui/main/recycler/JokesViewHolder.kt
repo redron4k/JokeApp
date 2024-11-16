@@ -14,14 +14,7 @@ class JokesViewHolder(
         binding.textViewAnswer.text = joke.jokeAnswer
         binding.textViewCategory.text = joke.category
         binding.root.setOnClickListener {
-            handlePersonClick(joke.id)
-        }
-    }
-
-
-    private fun handlePersonClick(id: Int) {
-        if (id != -1) {
-            clickListener(id)
+            clickListener(joke.id)
         }
     }
 }

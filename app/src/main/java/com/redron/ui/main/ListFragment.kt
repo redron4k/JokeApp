@@ -12,7 +12,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.redron.R
 import com.redron.data.JokesGenerator
 import com.redron.databinding.FragmentListBinding
-import com.redron.ui.JokeViewModelFactory
 import com.redron.ui.main.recycler.JokesListAdapter
 
 class ListFragment : Fragment(R.layout.fragment_list) {
@@ -31,7 +30,6 @@ class ListFragment : Fragment(R.layout.fragment_list) {
                 }
             )
         )
-        JokeViewModelFactory(JokesGenerator)
     }
     private val adapter = JokesListAdapter {
         findNavController().navigate(
@@ -43,6 +41,9 @@ class ListFragment : Fragment(R.layout.fragment_list) {
         super.onCreate(savedInstanceState)
 
         initViewModel()
+        savedInstanceState ?: run {
+            viewModel.generateJokes()
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -51,9 +52,6 @@ class ListFragment : Fragment(R.layout.fragment_list) {
         binding = FragmentListBinding.bind(view)
         binding.recyclerView.adapter = adapter
         binding.recyclerView.layoutManager = LinearLayoutManager(activity)
-        savedInstanceState ?: run {
-            viewModel.generateJokes()
-        }
     }
 
     private fun initViewModel() {

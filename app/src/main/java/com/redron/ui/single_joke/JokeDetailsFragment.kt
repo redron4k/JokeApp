@@ -14,7 +14,6 @@ import com.redron.R
 import com.redron.data.Joke
 import com.redron.data.JokesGenerator
 import com.redron.databinding.FragmentJokeDetailsBinding
-import com.redron.ui.JokeViewModelFactory
 
 class JokeDetailsFragment : Fragment() {
 
@@ -31,7 +30,6 @@ class JokeDetailsFragment : Fragment() {
                 }
             )
         )
-        JokeViewModelFactory(JokesGenerator)
     }
     private val args: JokeDetailsFragmentArgs by navArgs()
 
