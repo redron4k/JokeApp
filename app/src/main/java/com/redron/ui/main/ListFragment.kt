@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.ViewModelInitializer
 import androidx.navigation.fragment.findNavController
@@ -13,6 +14,8 @@ import com.redron.R
 import com.redron.data.JokesGenerator
 import com.redron.databinding.FragmentListBinding
 import com.redron.ui.main.recycler.JokesListAdapter
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class ListFragment : Fragment(R.layout.fragment_list) {
 
@@ -31,6 +34,7 @@ class ListFragment : Fragment(R.layout.fragment_list) {
             )
         )
     }
+
     private val adapter = JokesListAdapter {
         findNavController().navigate(
             ListFragmentDirections.actionListFragmentToJokeDetailsFragment(it)
@@ -40,7 +44,6 @@ class ListFragment : Fragment(R.layout.fragment_list) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        initViewModel()
         savedInstanceState ?: run {
             viewModel.generateJokes()
         }
@@ -52,14 +55,32 @@ class ListFragment : Fragment(R.layout.fragment_list) {
         binding = FragmentListBinding.bind(view)
         binding.recyclerView.adapter = adapter
         binding.recyclerView.layoutManager = LinearLayoutManager(activity)
+        binding.addFragmentButton.setOnClickListener {
+            findNavController().navigate(
+                ListFragmentDirections.actionListFragmentToAddJokeFragment()
+            )
+        }
+        initViewModel()
     }
 
     private fun initViewModel() {
-        viewModel.jokes.observe(this) {
-            adapter.submitList(it)
+        lifecycleScope.launch {
+            delay(1500L)
+            viewModel.jokes.collect {
+                adapter.submitList(it)
+                if (it.isEmpty()) {
+                    binding.textView.visibility = View.VISIBLE
+                } else {
+                    binding.textView.visibility = View.GONE
+                }
+            }
         }
-        viewModel.error.observe(this) {
-            Toast.makeText(activity, it, Toast.LENGTH_SHORT).show()
+        lifecycleScope.launch {
+            viewModel.error.collect {
+                it?.let {
+                    Toast.makeText(activity, it, Toast.LENGTH_SHORT).show()
+                }
+            }
         }
     }
 }
