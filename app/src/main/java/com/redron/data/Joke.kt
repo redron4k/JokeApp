@@ -14,9 +14,3 @@ data class Joke(
     val uuid: String = UUID.randomUUID().toString(),
     val fromNet: Boolean = true
 )
-
-@Serializable
-data class JokeResponseBody(
-    @SerialName("jokes")
-    val jokes: List<Joke>
-)

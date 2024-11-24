@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.redron.data.Joke
 import com.redron.data.JokesGenerator
-import com.redron.data.api.createRetrofit
+import com.redron.data.api.RetrofitInstance
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -21,13 +21,13 @@ class JokesListViewModel(private val generator: JokesGenerator) : ViewModel() {
     private val _isLoading = MutableStateFlow<Boolean>(false)
     val isLoading: StateFlow<Boolean> = _isLoading
 
-    private val retrofitClient = createRetrofit()
+    private val retrofitClient = RetrofitInstance.retrofitClient
 
     fun loadJokes() {
         if (_isLoading.value) return
+        _isLoading.value = true
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
-                _isLoading.value = true
                 generator.addJokes(retrofitClient.getJokes().jokes)
                 _jokes.value = generator.getAllJokes()
                 _isLoading.value = false
