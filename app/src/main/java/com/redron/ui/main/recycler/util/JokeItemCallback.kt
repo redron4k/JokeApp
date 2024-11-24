@@ -5,7 +5,7 @@ import com.redron.data.Joke
 
 object JokeItemCallback : DiffUtil.ItemCallback<Joke>() {
     override fun areItemsTheSame(oldItem: Joke, newItem: Joke): Boolean {
-        return oldItem.id == newItem.id
+        return oldItem.uuid == newItem.uuid
     }
 
     override fun areContentsTheSame(oldItem: Joke, newItem: Joke): Boolean {

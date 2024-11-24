@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.ViewModelInitializer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.redron.R
 import com.redron.data.JokesGenerator
 import com.redron.databinding.FragmentListBinding
@@ -48,7 +49,7 @@ class ListFragment : Fragment(R.layout.fragment_list) {
         super.onCreate(savedInstanceState)
 
         savedInstanceState ?: run {
-            viewModel.generateJokes()
+            viewModel.loadJokes()
         }
     }
 
@@ -63,26 +64,39 @@ class ListFragment : Fragment(R.layout.fragment_list) {
                 ListFragmentDirections.actionListFragmentToAddJokeFragment()
             )
         }
+
+        binding.recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                val layoutManager = recyclerView.layoutManager as LinearLayoutManager
+                if (layoutManager.findLastVisibleItemPosition() == adapter.itemCount - 1) {
+                    viewModel.loadJokes()
+                }
+            }
+        })
+
         initViewModel()
     }
 
     private fun initViewModel() {
         lifecycleScope.launch {
-            delay(1500L)
             viewModel.jokes.collect {
                 adapter.submitList(it)
-                if (it.isEmpty()) {
-                    binding.textView.visibility = View.VISIBLE
-                } else {
-                    binding.textView.visibility = View.GONE
-                }
+                binding.textView.visibility = if (it.isEmpty()) View.VISIBLE else View.GONE
             }
         }
+
         lifecycleScope.launch {
             viewModel.error.collect {
                 it?.let {
                     Toast.makeText(activity, it, Toast.LENGTH_SHORT).show()
                 }
+            }
+        }
+
+        lifecycleScope.launch {
+            viewModel.isLoading.collect {
+                binding.progressBar.visibility = if (it) View.VISIBLE else View.GONE
             }
         }
     }

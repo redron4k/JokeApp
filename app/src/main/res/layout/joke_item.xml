@@ -42,4 +42,15 @@
         android:textColor="@android:color/secondary_text_light"
         android:textSize="13sp"
         tools:text="Category" />
+
+    <TextView
+        android:id="@+id/textViewFromNet"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif-condensed-light"
+        android:gravity="end"
+        android:layout_margin="7dp"
+        android:textColor="@android:color/secondary_text_light"
+        android:textSize="13sp"
+        tools:text="FromNet" />
 </LinearLayout>

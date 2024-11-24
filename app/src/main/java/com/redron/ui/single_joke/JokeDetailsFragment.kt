@@ -76,6 +76,9 @@ class JokeDetailsFragment : Fragment() {
             textViewQuestion.text = item?.jokeQuestion
             textViewAnswer.text = item?.jokeAnswer
             textViewCategory.text = item?.category
+            if (item != null) {
+                textViewFromNet.text = if (item.fromNet) "Из сети" else "Локально"
+            }
         }
     }
 }
