@@ -6,7 +6,7 @@ import com.redron.databinding.JokeItemBinding
 
 class JokesViewHolder(
     private val binding: JokeItemBinding,
-    private val clickListener: (Int) -> Unit
+    private val clickListener: (String) -> Unit
 ) : RecyclerView.ViewHolder(binding.root) {
 
     fun bind(joke: Joke) {

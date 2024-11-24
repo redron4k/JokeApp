@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">My First App</string>
+    <string name="floating_button_content">Add new Joke</string>
+    <string name="add_joke_title">Введите анекдот</string>
+    <string name="addJokeButton_text">Добавить анекдот</string>
+    <string name="category">Категория</string>
+    <string name="question">Вопрос</string>
+    <string name="answer">Ответ</string>
+    <string name="no_jokes_text">Шутки кончились, добавьте еще</string>
 </resources>

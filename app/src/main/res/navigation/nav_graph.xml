@@ -13,6 +13,9 @@
         <action
             android:id="@+id/action_listFragment_to_jokeDetailsFragment"
             app:destination="@id/jokeDetailsFragment" />
+        <action
+            android:id="@+id/action_listFragment_to_addJokeFragment"
+            app:destination="@id/addJokeFragment" />
     </fragment>
     <fragment
         android:id="@+id/jokeDetailsFragment"
@@ -21,6 +24,11 @@
         tools:layout="@layout/fragment_joke_details" >
 
         <argument android:name="jokeID"
-            app:argType="integer" />
+            app:argType="string" />
     </fragment>
+    <fragment
+        android:id="@+id/addJokeFragment"
+        android:name="com.redron.ui.add_joke.AddJokeFragment"
+        android:label="fragment_add_joke"
+        tools:layout="@layout/fragment_add_joke" />
 </navigation>

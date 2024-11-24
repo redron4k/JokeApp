@@ -3,13 +3,12 @@ package com.redron.ui.main.recycler
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
-import androidx.recyclerview.widget.RecyclerView
 import com.redron.data.Joke
 import com.redron.databinding.JokeItemBinding
 import com.redron.ui.main.recycler.util.JokeItemCallback
 
 class JokesListAdapter(
-    private val clickListener: (Int) -> Unit
+    private val clickListener: (String) -> Unit
 ) :
     ListAdapter<Joke, JokesViewHolder>(JokeItemCallback) {
 

@@ -8,12 +8,14 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewmodel.ViewModelInitializer
 import androidx.navigation.fragment.navArgs
 import com.redron.R
 import com.redron.data.Joke
 import com.redron.data.JokesGenerator
 import com.redron.databinding.FragmentJokeDetailsBinding
+import kotlinx.coroutines.launch
 
 class JokeDetailsFragment : Fragment() {
 
@@ -54,17 +56,26 @@ class JokeDetailsFragment : Fragment() {
     }
 
     private fun initViewModel() {
-        viewModel.jokes.observe(this, ::setUpJoke)
-        viewModel.error.observe(this) {
-            Toast.makeText(activity, it, Toast.LENGTH_SHORT).show()
+        lifecycleScope.launch {
+            viewModel.joke.collect {
+                it?.let { setUpJoke(it) }
+            }
+        }
+
+        lifecycleScope.launch {
+            viewModel.error.collect {
+                it?.let {
+                    Toast.makeText(activity, it, Toast.LENGTH_SHORT).show()
+                }
+            }
         }
     }
 
-    private fun setUpJoke(item: Joke) {
+    private fun setUpJoke(item: Joke?) {
         with(binding) {
-            textViewQuestion.text = item.jokeQuestion
-            textViewAnswer.text = item.jokeAnswer
-            textViewCategory.text = item.category
+            textViewQuestion.text = item?.jokeQuestion
+            textViewAnswer.text = item?.jokeAnswer
+            textViewCategory.text = item?.category
         }
     }
 }
