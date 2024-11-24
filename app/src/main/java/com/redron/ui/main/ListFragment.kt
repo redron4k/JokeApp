@@ -22,18 +22,21 @@ class ListFragment : Fragment(R.layout.fragment_list) {
     private lateinit var binding: FragmentListBinding
 
 
-    private val viewModel: JokesListViewModel by viewModels {
-        ViewModelProvider.Factory.from(
-            ViewModelInitializer(
-                clazz = JokesListViewModel::class.java,
-                initializer = {
-                    JokesListViewModel(
-                        JokesGenerator
-                    )
-                }
+    private val viewModel: JokesListViewModel by viewModels(
+        ownerProducer = { requireActivity() },
+        factoryProducer = {
+            ViewModelProvider.Factory.from(
+                ViewModelInitializer(
+                    clazz = JokesListViewModel::class.java,
+                    initializer = {
+                        JokesListViewModel(
+                            JokesGenerator
+                        )
+                    }
+                )
             )
-        )
-    }
+        }
+    )
 
     private val adapter = JokesListAdapter {
         findNavController().navigate(

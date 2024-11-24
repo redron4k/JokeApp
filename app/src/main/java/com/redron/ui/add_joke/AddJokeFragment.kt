@@ -19,18 +19,21 @@ class AddJokeFragment : Fragment(R.layout.fragment_add_joke) {
 
     private lateinit var binding: FragmentAddJokeBinding
 
-    private val viewModel: JokesListViewModel by viewModels {
-        ViewModelProvider.Factory.from(
-            ViewModelInitializer(
-                clazz = JokesListViewModel::class.java,
-                initializer = {
-                    JokesListViewModel(
-                        JokesGenerator
-                    )
-                }
+    private val viewModel: JokesListViewModel by viewModels(
+        ownerProducer = { requireActivity() },
+        factoryProducer = {
+            ViewModelProvider.Factory.from(
+                ViewModelInitializer(
+                    clazz = JokesListViewModel::class.java,
+                    initializer = {
+                        JokesListViewModel(
+                            JokesGenerator
+                        )
+                    }
+                )
             )
-        )
-    }
+        }
+    )
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

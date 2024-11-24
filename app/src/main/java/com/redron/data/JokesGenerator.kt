@@ -1,7 +1,7 @@
 package com.redron.data
 
 object JokesGenerator {
-    private val jokesList = listOf<Joke>(
+    private val PREPARED_JOKES = listOf(
         Joke(
             "Что будет, если ворона сядет на оголённые провода?",
             "Электро кар", "Каламбуры"
@@ -42,22 +42,23 @@ object JokesGenerator {
         )
     )
 
-    val jokes = mutableListOf<Joke>()
+    private val _jokesList = mutableListOf<Joke>()
+    val jokesList: List<Joke> = _jokesList
 
     fun generate() {
-        jokes.clear()
-        jokes.addAll(jokesList.shuffled())
+        _jokesList.clear()
+        _jokesList.addAll(PREPARED_JOKES.shuffled())
     }
 
     fun getAllJokes(): List<Joke> {
-        return jokes
+        return jokesList
     }
 
     fun getJoke(id: String): Joke? {
-        return jokes.find { it.id == id }
+        return _jokesList.find { it.id == id }
     }
 
     fun addJoke(joke: Joke) {
-        jokes.add(joke)
+        _jokesList.add(joke)
     }
 }
