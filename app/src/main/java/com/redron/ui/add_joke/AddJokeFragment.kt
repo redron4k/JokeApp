@@ -45,7 +45,7 @@ class AddJokeFragment : Fragment(R.layout.fragment_add_joke) {
             val answer = binding.editTextAnswer.text.toString()
 
             if (category.isNotBlank() and question.isNotBlank() and answer.isNotBlank()) {
-                viewModel.addJoke(Joke(question, answer, category, fromNet = false))
+                viewModel.addJoke(Joke(question, answer, category, isFromNet = false))
                 Toast.makeText(activity, "Анекдот добавлен", Toast.LENGTH_SHORT).show()
                 findNavController().navigateUp()
             } else {

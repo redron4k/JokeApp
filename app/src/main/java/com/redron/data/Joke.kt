@@ -12,5 +12,5 @@ data class Joke(
     @SerialName("category")
     val category: String,
     val uuid: String = UUID.randomUUID().toString(),
-    val fromNet: Boolean = true
+    val isFromNet: Boolean = true
 )
