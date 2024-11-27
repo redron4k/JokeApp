@@ -7,4 +7,6 @@
     <string name="question">Вопрос</string>
     <string name="answer">Ответ</string>
     <string name="no_jokes_text">Шутки кончились, добавьте еще</string>
+    <string name="is_from_net_true">Из сети</string>
+    <string name="is_from_net_false">Локально</string>
 </resources>

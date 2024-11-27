@@ -77,7 +77,10 @@ class JokeDetailsFragment : Fragment() {
             textViewAnswer.text = item?.jokeAnswer
             textViewCategory.text = item?.category
             if (item != null) {
-                textViewFromNet.text = if (item.isFromNet) "Из сети" else "Локально"
+                textViewFromNet.text = if (item.isFromNet)
+                    activity?.getString(R.string.is_from_net_true)
+                else
+                    activity?.getString(R.string.is_from_net_false)
             }
         }
     }

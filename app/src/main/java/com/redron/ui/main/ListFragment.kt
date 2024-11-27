@@ -15,7 +15,6 @@ import com.redron.R
 import com.redron.data.JokesGenerator
 import com.redron.databinding.FragmentListBinding
 import com.redron.ui.main.recycler.JokesListAdapter
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class ListFragment : Fragment(R.layout.fragment_list) {
@@ -71,7 +70,6 @@ class ListFragment : Fragment(R.layout.fragment_list) {
                 val layoutManager = recyclerView.layoutManager as LinearLayoutManager
                 if (layoutManager.findLastVisibleItemPosition() == adapter.itemCount - 1) {
                     viewModel.loadJokes()
-                    println("viewmodel " + viewModel.jokes.value.size.toString() + viewModel.jokes.value.toString())
                 }
             }
         })
@@ -82,7 +80,6 @@ class ListFragment : Fragment(R.layout.fragment_list) {
     private fun initViewModel() {
         lifecycleScope.launch {
             viewModel.jokes.collect {
-                println("collect " + viewModel.jokes.value.size.toString() + viewModel.jokes.value.toString())
                 adapter.submitList(it)
                 binding.textView.visibility = if (it.isEmpty()) View.VISIBLE else View.GONE
             }
