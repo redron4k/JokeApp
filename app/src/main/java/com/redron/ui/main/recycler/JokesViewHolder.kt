@@ -16,9 +16,9 @@ class JokesViewHolder(
         binding.textViewAnswer.text = joke.jokeAnswer
         binding.textViewCategory.text = joke.category
         binding.textViewFromNet.text = if (joke.isFromNet)
-            "Из сети" // context.getString(R.string.is_from_net_true)
+            binding.root.context.getString(R.string.is_from_net_true)
         else
-            "Локально" // context.getString(R.string.is_from_net_false)
+            binding.root.context.getString(R.string.is_from_net_false)
         binding.root.setOnClickListener {
             clickListener(joke.uuid)
         }
