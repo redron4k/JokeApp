@@ -11,6 +11,7 @@ import androidx.lifecycle.viewmodel.ViewModelInitializer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.snackbar.Snackbar
 import com.redron.R
 import com.redron.data.JokesGenerator
 import com.redron.databinding.FragmentListBinding
@@ -48,7 +49,7 @@ class ListFragment : Fragment(R.layout.fragment_list) {
         super.onCreate(savedInstanceState)
 
         savedInstanceState ?: run {
-            viewModel.loadJokes()
+            viewModel.initJokes()
         }
     }
 
@@ -69,7 +70,7 @@ class ListFragment : Fragment(R.layout.fragment_list) {
                 super.onScrolled(recyclerView, dx, dy)
                 val layoutManager = recyclerView.layoutManager as LinearLayoutManager
                 if (layoutManager.findLastVisibleItemPosition() == adapter.itemCount - 1) {
-                    viewModel.loadJokes()
+                    viewModel.loadMoreJokes()
                 }
             }
         })
@@ -96,6 +97,17 @@ class ListFragment : Fragment(R.layout.fragment_list) {
         lifecycleScope.launch {
             viewModel.isLoading.collect {
                 binding.progressBar.visibility = if (it) View.VISIBLE else View.GONE
+            }
+        }
+
+        lifecycleScope.launch {
+            viewModel.isLoadFromCache.collect {
+                if (it)
+                    Snackbar.make(
+                        binding.root,
+                        requireActivity().getString(R.string.is_load_from_cache_true),
+                        Snackbar.LENGTH_SHORT
+                    ).show()
             }
         }
     }
