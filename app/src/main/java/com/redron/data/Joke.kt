@@ -1,10 +1,16 @@
 package com.redron.data
 
 import java.util.UUID
+import kotlinx.serialization.*
 
+@Serializable
 data class Joke(
+    @SerialName("setup")
     val jokeQuestion: String,
+    @SerialName("delivery")
     val jokeAnswer: String,
+    @SerialName("category")
     val category: String,
-    val id: String = UUID.randomUUID().toString()
+    val uuid: String = UUID.randomUUID().toString(),
+    val isFromNet: Boolean = true
 )

@@ -76,6 +76,12 @@ class JokeDetailsFragment : Fragment() {
             textViewQuestion.text = item?.jokeQuestion
             textViewAnswer.text = item?.jokeAnswer
             textViewCategory.text = item?.category
+            if (item != null) {
+                textViewFromNet.text = if (item.isFromNet)
+                    activity?.getString(R.string.is_from_net_true)
+                else
+                    activity?.getString(R.string.is_from_net_false)
+            }
         }
     }
 }
