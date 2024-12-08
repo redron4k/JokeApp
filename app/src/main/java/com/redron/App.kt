@@ -1,7 +1,7 @@
 package com.redron
 
 import android.app.Application
-import com.redron.data.db.JokesDatabase
+import com.redron.data.datasource.local.JokesDatabase
 
 class App : Application() {
     override fun onCreate() {
