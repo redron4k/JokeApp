@@ -20,6 +20,9 @@ class JokesListViewModel(
     private val addJoke: AddJokeUseCase,
     private val addJokes: AddJokesUseCase
 ) : ViewModel() {
+    
+    private val EXPIRATION_TIME = TimeUnit.HOURS.toMillis(24)
+    
     private val _jokes = MutableStateFlow<List<Joke>>(emptyList())
     val jokes: StateFlow<List<Joke>> = _jokes
 
@@ -33,10 +36,10 @@ class JokesListViewModel(
     val isLoadFromCache: StateFlow<Boolean> = _isLoadFromCache
 
     private val retrofitClient = RetrofitInstance.retrofitClient
-    private val database = JokesDatabase.INSTANCE
+    private val database = JokesDatabase.INSTANCE!!
 
     private suspend fun loadFromCache() {
-        val criticalTime = System.currentTimeMillis() - TimeUnit.HOURS.toMillis(24)
+        val criticalTime = System.currentTimeMillis() - EXPIRATION_TIME
         addJokes(database.jokeTempDao().getAll(
             criticalTime
         ).map {

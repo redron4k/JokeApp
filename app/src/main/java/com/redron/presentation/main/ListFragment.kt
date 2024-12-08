@@ -39,7 +39,7 @@ class ListFragment : Fragment(R.layout.fragment_list) {
                     initializer = {
                         val repository = JokesRepository(
                             RemoteJokesDataSourceImpl(RetrofitInstance.retrofitClient),
-                            LocalJokesDataSourceImpl(JokesDatabase.INSTANCE)
+                            LocalJokesDataSourceImpl(JokesDatabase.INSTANCE!!)
                         )
                         JokesListViewModel(
                             GetJokesUseCase(repository),

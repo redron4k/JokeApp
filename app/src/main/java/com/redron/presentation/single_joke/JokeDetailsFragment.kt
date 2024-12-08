@@ -33,7 +33,7 @@ class JokeDetailsFragment : Fragment() {
                 initializer = {
                     val repository = JokesRepository(
                         RemoteJokesDataSourceImpl(RetrofitInstance.retrofitClient),
-                        LocalJokesDataSourceImpl(JokesDatabase.INSTANCE)
+                        LocalJokesDataSourceImpl(JokesDatabase.INSTANCE!!)
                     )
                     JokeDetailsViewModel(
                         GetJokeUseCase(repository)

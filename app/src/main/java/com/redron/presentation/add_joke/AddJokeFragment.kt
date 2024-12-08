@@ -35,7 +35,7 @@ class AddJokeFragment : Fragment(R.layout.fragment_add_joke) {
                     initializer = {
                         val repository = JokesRepository(
                             RemoteJokesDataSourceImpl(RetrofitInstance.retrofitClient),
-                            LocalJokesDataSourceImpl(JokesDatabase.INSTANCE)
+                            LocalJokesDataSourceImpl(JokesDatabase.INSTANCE!!)
                         )
                         JokesListViewModel(
                             GetJokesUseCase(repository),

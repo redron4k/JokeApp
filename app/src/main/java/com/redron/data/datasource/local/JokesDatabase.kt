@@ -16,15 +16,23 @@ abstract class JokesDatabase : RoomDatabase() {
 
     companion object {
         @Volatile
-        lateinit var INSTANCE: JokesDatabase
+        var INSTANCE: JokesDatabase? = null
 
         fun initDatabase(context: Context) {
-            val instance = Room.databaseBuilder(
-                context.applicationContext,
-                JokesDatabase::class.java,
-                "jokes_database"
-            ).build()
-            INSTANCE = instance
+            var instance = INSTANCE
+            if (instance == null) {
+                synchronized(this) {
+                    instance = INSTANCE
+                    if (instance == null) {
+                        instance = Room.databaseBuilder(
+                            context.applicationContext,
+                            JokesDatabase::class.java,
+                            "jokes_database"
+                        ).build()
+                        INSTANCE = instance
+                    }
+                }
+            }
         }
     }
 }
