@@ -9,16 +9,22 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.ViewModelInitializer
 import androidx.navigation.fragment.findNavController
 import com.redron.R
+import com.redron.data.datasource.local.CacheJokesDataSource
+import com.redron.data.datasource.local.CacheJokesDataSourceImpl
 import com.redron.domain.entity.Joke
 import com.redron.data.datasource.remote.RetrofitInstance
 import com.redron.data.datasource.local.LocalJokesDataSourceImpl
 import com.redron.data.datasource.remote.RemoteJokesDataSourceImpl
 import com.redron.data.datasource.local.JokesDatabase
-import com.redron.data.repository.JokesRepository
+import com.redron.data.repository.JokesRepositoryImpl
 import com.redron.databinding.FragmentAddJokeBinding
 import com.redron.domain.usecases.AddJokeUseCase
 import com.redron.domain.usecases.AddJokesUseCase
+import com.redron.domain.usecases.ClearExpiredCacheUseCase
+import com.redron.domain.usecases.ClearLoadedJokesUseCase
 import com.redron.domain.usecases.GetJokesUseCase
+import com.redron.domain.usecases.LoadJokesFromCacheUseCase
+import com.redron.domain.usecases.LoadJokesFromNetUseCase
 import com.redron.presentation.main.JokesListViewModel
 
 
@@ -33,14 +39,19 @@ class AddJokeFragment : Fragment(R.layout.fragment_add_joke) {
                 ViewModelInitializer(
                     clazz = JokesListViewModel::class.java,
                     initializer = {
-                        val repository = JokesRepository(
-                            RemoteJokesDataSourceImpl(RetrofitInstance.retrofitClient),
-                            LocalJokesDataSourceImpl(JokesDatabase.INSTANCE!!)
+                        val repository = JokesRepositoryImpl(
+                            CacheJokesDataSourceImpl(JokesDatabase.INSTANCE!!),
+                            LocalJokesDataSourceImpl(JokesDatabase.INSTANCE!!),
+                            RemoteJokesDataSourceImpl(RetrofitInstance.retrofitClient)
                         )
                         JokesListViewModel(
                             GetJokesUseCase(repository),
                             AddJokeUseCase(repository),
-                            AddJokesUseCase(repository)
+                            AddJokesUseCase(repository),
+                            LoadJokesFromCacheUseCase(repository),
+                            ClearExpiredCacheUseCase(repository),
+                            ClearLoadedJokesUseCase(repository),
+                            LoadJokesFromNetUseCase(repository)
                         )
                     }
                 )

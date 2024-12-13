@@ -12,12 +12,13 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewmodel.ViewModelInitializer
 import androidx.navigation.fragment.navArgs
 import com.redron.R
+import com.redron.data.datasource.local.CacheJokesDataSourceImpl
 import com.redron.domain.entity.Joke
 import com.redron.data.datasource.remote.RetrofitInstance
 import com.redron.data.datasource.local.LocalJokesDataSourceImpl
 import com.redron.data.datasource.remote.RemoteJokesDataSourceImpl
 import com.redron.data.datasource.local.JokesDatabase
-import com.redron.data.repository.JokesRepository
+import com.redron.data.repository.JokesRepositoryImpl
 import com.redron.databinding.FragmentJokeDetailsBinding
 import com.redron.domain.usecases.GetJokeUseCase
 import kotlinx.coroutines.launch
@@ -31,9 +32,10 @@ class JokeDetailsFragment : Fragment() {
             ViewModelInitializer(
                 clazz = JokeDetailsViewModel::class.java,
                 initializer = {
-                    val repository = JokesRepository(
-                        RemoteJokesDataSourceImpl(RetrofitInstance.retrofitClient),
-                        LocalJokesDataSourceImpl(JokesDatabase.INSTANCE!!)
+                    val repository = JokesRepositoryImpl(
+                        CacheJokesDataSourceImpl(JokesDatabase.INSTANCE!!),
+                        LocalJokesDataSourceImpl(JokesDatabase.INSTANCE!!),
+                        RemoteJokesDataSourceImpl(RetrofitInstance.retrofitClient)
                     )
                     JokeDetailsViewModel(
                         GetJokeUseCase(repository)

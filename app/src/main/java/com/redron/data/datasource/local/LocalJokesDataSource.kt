@@ -9,7 +9,7 @@ interface LocalJokesDataSource {
 
     suspend fun addJokes(jokes: List<Joke>)
 
-    suspend fun cacheJokes(jokes: List<Joke>)
-
     suspend fun getJoke(id: String): Joke?
+
+    suspend fun clearLoaded()
 }

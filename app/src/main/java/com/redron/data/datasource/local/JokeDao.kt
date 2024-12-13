@@ -9,10 +9,13 @@ import com.redron.data.entity.JokeEntity
 interface JokeDao {
     @Insert
     suspend fun insert(joke: JokeEntity)
+
     @Insert
     suspend fun insertAll(jokes: List<JokeEntity>)
+
     @Query("SELECT * FROM jokes")
     suspend fun getAll(): List<JokeEntity>
+
     @Query("DELETE FROM jokes WHERE isFromNet=1")
     suspend fun clearLoaded()
 }

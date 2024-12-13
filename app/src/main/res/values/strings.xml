@@ -9,5 +9,5 @@
     <string name="no_jokes_text">Шутки кончились, добавьте еще</string>
     <string name="is_from_net_true">Из сети</string>
     <string name="is_from_net_false">Локально</string>
-    <string name="is_load_from_cache_true">Отчутствует соединение с сетью\nАнекдоты восстановлены из кэша</string>
+    <string name="is_load_from_cache_true">Отсутствует соединение с сетью\nАнекдоты восстановлены из кэша</string>
 </resources>

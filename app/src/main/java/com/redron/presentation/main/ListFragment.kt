@@ -13,15 +13,20 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import com.redron.R
+import com.redron.data.datasource.local.CacheJokesDataSourceImpl
 import com.redron.data.datasource.remote.RetrofitInstance
 import com.redron.data.datasource.local.LocalJokesDataSourceImpl
 import com.redron.data.datasource.remote.RemoteJokesDataSourceImpl
 import com.redron.data.datasource.local.JokesDatabase
-import com.redron.data.repository.JokesRepository
+import com.redron.data.repository.JokesRepositoryImpl
 import com.redron.databinding.FragmentListBinding
 import com.redron.domain.usecases.AddJokeUseCase
 import com.redron.domain.usecases.AddJokesUseCase
+import com.redron.domain.usecases.ClearExpiredCacheUseCase
+import com.redron.domain.usecases.ClearLoadedJokesUseCase
 import com.redron.domain.usecases.GetJokesUseCase
+import com.redron.domain.usecases.LoadJokesFromCacheUseCase
+import com.redron.domain.usecases.LoadJokesFromNetUseCase
 import com.redron.presentation.main.recycler.JokesListAdapter
 import kotlinx.coroutines.launch
 
@@ -37,14 +42,19 @@ class ListFragment : Fragment(R.layout.fragment_list) {
                 ViewModelInitializer(
                     clazz = JokesListViewModel::class.java,
                     initializer = {
-                        val repository = JokesRepository(
-                            RemoteJokesDataSourceImpl(RetrofitInstance.retrofitClient),
-                            LocalJokesDataSourceImpl(JokesDatabase.INSTANCE!!)
+                        val repository = JokesRepositoryImpl(
+                            CacheJokesDataSourceImpl(JokesDatabase.INSTANCE!!),
+                            LocalJokesDataSourceImpl(JokesDatabase.INSTANCE!!),
+                            RemoteJokesDataSourceImpl(RetrofitInstance.retrofitClient)
                         )
                         JokesListViewModel(
                             GetJokesUseCase(repository),
                             AddJokeUseCase(repository),
-                            AddJokesUseCase(repository)
+                            AddJokesUseCase(repository),
+                            LoadJokesFromCacheUseCase(repository),
+                            ClearExpiredCacheUseCase(repository),
+                            ClearLoadedJokesUseCase(repository),
+                            LoadJokesFromNetUseCase(repository)
                         )
                     }
                 )
