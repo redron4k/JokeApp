@@ -15,7 +15,7 @@ interface JokesRepository {
 
     suspend fun saveJokesToCache(jokes: List<Joke>)
 
-    suspend fun loadActualJokesFromCache(criticalTime: Long): List<Joke>
+    suspend fun loadActualJokesFromCache(): List<Joke>
 
     suspend fun clearExpiredCache(criticalTime: Long)
 

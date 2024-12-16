@@ -5,12 +5,17 @@ import com.redron.domain.entity.Joke
 import com.redron.data.datasource.local.LocalJokesDataSource
 import com.redron.data.datasource.remote.RemoteJokesDataSource
 import com.redron.domain.repository.JokesRepository
+import java.util.concurrent.TimeUnit
 
 class JokesRepositoryImpl(
     private val cacheDataSource: CacheJokesDataSource,
     private val localDataSource: LocalJokesDataSource,
     private val remoteDataSource: RemoteJokesDataSource
 ) : JokesRepository {
+
+    companion object {
+        private val EXPIRATION_TIME = TimeUnit.HOURS.toMillis(24)
+    }
 
     override suspend fun addJoke(joke: Joke) {
         localDataSource.addJoke(joke)
@@ -36,7 +41,8 @@ class JokesRepositoryImpl(
         cacheDataSource.saveJokes(jokes)
     }
 
-    override suspend fun loadActualJokesFromCache(criticalTime: Long): List<Joke> {
+    override suspend fun loadActualJokesFromCache(): List<Joke> {
+        val criticalTime = System.currentTimeMillis() - EXPIRATION_TIME
         clearExpiredCache(criticalTime)
         return cacheDataSource.loadJokes(criticalTime)
     }

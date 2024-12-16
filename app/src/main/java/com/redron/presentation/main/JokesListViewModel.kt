@@ -25,10 +25,6 @@ class JokesListViewModel(
     private val loadJokesFromNet: LoadJokesFromNetUseCase
 ) : ViewModel() {
 
-    companion object {
-        private val EXPIRATION_TIME = TimeUnit.HOURS.toMillis(24)
-    }
-
     private val _jokes = MutableStateFlow<List<Joke>>(emptyList())
     val jokes: StateFlow<List<Joke>> = _jokes
 
@@ -42,8 +38,7 @@ class JokesListViewModel(
     val isLoadFromCache: StateFlow<Boolean> = _isLoadFromCache
 
     private suspend fun loadFromCache() {
-        val criticalTime = System.currentTimeMillis() - EXPIRATION_TIME
-        addJokes(loadJokesFromCache(criticalTime))
+        addJokes(loadJokesFromCache())
     }
 
     fun initJokes() {
