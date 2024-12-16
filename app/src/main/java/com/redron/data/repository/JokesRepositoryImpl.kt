@@ -6,8 +6,9 @@ import com.redron.data.datasource.local.LocalJokesDataSource
 import com.redron.data.datasource.remote.RemoteJokesDataSource
 import com.redron.domain.repository.JokesRepository
 import java.util.concurrent.TimeUnit
+import javax.inject.Inject
 
-class JokesRepositoryImpl(
+class JokesRepositoryImpl @Inject constructor(
     private val cacheDataSource: CacheJokesDataSource,
     private val localDataSource: LocalJokesDataSource,
     private val remoteDataSource: RemoteJokesDataSource

@@ -15,8 +15,9 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.concurrent.TimeUnit
+import javax.inject.Inject
 
-class JokesListViewModel(
+class JokesListViewModel @Inject constructor(
     private val loadJokesLocal: LoadJokesLocalUseCase,
     private val addJoke: AddJokeUseCase,
     private val addJokes: AddJokesUseCase,

@@ -3,8 +3,10 @@ package com.redron.data.datasource.local
 import com.redron.domain.entity.Joke
 import com.redron.data.mapper.JokeEntityMapper
 import com.redron.data.mapper.JokeItemMapper
+import javax.inject.Inject
 
-class LocalJokesDataSourceImpl(private val database: JokesDatabase) : LocalJokesDataSource {
+class LocalJokesDataSourceImpl @Inject constructor(private val database: JokesDatabase):
+    LocalJokesDataSource {
 
     override suspend fun addJoke(joke: Joke) {
         database.jokeDao().insert(

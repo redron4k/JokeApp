@@ -28,6 +28,7 @@ import com.redron.domain.usecases.LoadJokesFromCacheUseCase
 import com.redron.domain.usecases.LoadJokesFromNetUseCase
 import com.redron.presentation.main.recycler.JokesListAdapter
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 class ListFragment : Fragment(R.layout.fragment_list) {
 
