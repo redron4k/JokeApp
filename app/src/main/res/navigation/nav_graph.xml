@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/listFragment"
-        android:name="com.redron.ui.main.ListFragment"
+        android:name="com.redron.presentation.main.ListFragment"
         android:label="fragment_list"
         tools:layout="@layout/fragment_list" >
         <action
@@ -19,7 +19,7 @@
     </fragment>
     <fragment
         android:id="@+id/jokeDetailsFragment"
-        android:name="com.redron.ui.single_joke.JokeDetailsFragment"
+        android:name="com.redron.presentation.single_joke.JokeDetailsFragment"
         android:label="fragment_joke_details"
         tools:layout="@layout/fragment_joke_details" >
 
@@ -28,7 +28,7 @@
     </fragment>
     <fragment
         android:id="@+id/addJokeFragment"
-        android:name="com.redron.ui.add_joke.AddJokeFragment"
+        android:name="com.redron.presentation.add_joke.AddJokeFragment"
         android:label="fragment_add_joke"
         tools:layout="@layout/fragment_add_joke" />
 </navigation>
