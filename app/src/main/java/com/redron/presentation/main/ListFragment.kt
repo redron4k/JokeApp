@@ -22,9 +22,8 @@ import com.redron.data.repository.JokesRepositoryImpl
 import com.redron.databinding.FragmentListBinding
 import com.redron.domain.usecases.AddJokeUseCase
 import com.redron.domain.usecases.AddJokesUseCase
-import com.redron.domain.usecases.ClearExpiredCacheUseCase
 import com.redron.domain.usecases.ClearLoadedJokesUseCase
-import com.redron.domain.usecases.GetJokesUseCase
+import com.redron.domain.usecases.LoadJokesLocalUseCase
 import com.redron.domain.usecases.LoadJokesFromCacheUseCase
 import com.redron.domain.usecases.LoadJokesFromNetUseCase
 import com.redron.presentation.main.recycler.JokesListAdapter
@@ -48,11 +47,10 @@ class ListFragment : Fragment(R.layout.fragment_list) {
                             RemoteJokesDataSourceImpl(RetrofitInstance.retrofitClient)
                         )
                         JokesListViewModel(
-                            GetJokesUseCase(repository),
+                            LoadJokesLocalUseCase(repository),
                             AddJokeUseCase(repository),
                             AddJokesUseCase(repository),
                             LoadJokesFromCacheUseCase(repository),
-                            ClearExpiredCacheUseCase(repository),
                             ClearLoadedJokesUseCase(repository),
                             LoadJokesFromNetUseCase(repository)
                         )

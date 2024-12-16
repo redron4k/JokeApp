@@ -3,12 +3,10 @@ package com.redron.presentation.main
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.redron.domain.entity.Joke
-import com.redron.data.datasource.remote.RetrofitInstance
 import com.redron.domain.usecases.AddJokeUseCase
 import com.redron.domain.usecases.AddJokesUseCase
-import com.redron.domain.usecases.ClearExpiredCacheUseCase
 import com.redron.domain.usecases.ClearLoadedJokesUseCase
-import com.redron.domain.usecases.GetJokesUseCase
+import com.redron.domain.usecases.LoadJokesLocalUseCase
 import com.redron.domain.usecases.LoadJokesFromCacheUseCase
 import com.redron.domain.usecases.LoadJokesFromNetUseCase
 import kotlinx.coroutines.Dispatchers
@@ -19,13 +17,12 @@ import kotlinx.coroutines.withContext
 import java.util.concurrent.TimeUnit
 
 class JokesListViewModel(
-    private val getJokes: GetJokesUseCase,
+    private val loadJokesLocal: LoadJokesLocalUseCase,
     private val addJoke: AddJokeUseCase,
     private val addJokes: AddJokesUseCase,
-    private val getJokesFromCache: LoadJokesFromCacheUseCase,
-    private val deleteExpiredCache: ClearExpiredCacheUseCase,
+    private val loadJokesFromCache: LoadJokesFromCacheUseCase,
     private val clearLoadedJokes: ClearLoadedJokesUseCase,
-    private val getJokesFromNet: LoadJokesFromNetUseCase
+    private val loadJokesFromNet: LoadJokesFromNetUseCase
 ) : ViewModel() {
 
     companion object {
@@ -46,8 +43,7 @@ class JokesListViewModel(
 
     private suspend fun loadFromCache() {
         val criticalTime = System.currentTimeMillis() - EXPIRATION_TIME
-        addJokes(getJokesFromCache(criticalTime))
-        deleteExpiredCache(criticalTime)
+        addJokes(loadJokesFromCache(criticalTime))
     }
 
     fun initJokes() {
@@ -56,13 +52,13 @@ class JokesListViewModel(
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 try {
-                    addJokes(getJokesFromNet())
+                    addJokes(loadJokesFromNet())
                     _isLoadFromCache.value = false
                 } catch (_: Exception) {
                     loadFromCache()
                     _isLoadFromCache.value = true
                 }
-                _jokes.value = getJokes()
+                _jokes.value = loadJokesLocal()
                 _isLoading.value = false
             }
         }
@@ -74,7 +70,7 @@ class JokesListViewModel(
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 try {
-                    addJokes(getJokesFromNet())
+                    addJokes(loadJokesFromNet())
                     _isLoadFromCache.value = false
                 } catch (_: Exception) {
                     if (!_isLoadFromCache.value) {
@@ -82,7 +78,7 @@ class JokesListViewModel(
                         _isLoadFromCache.value = true
                     }
                 }
-                _jokes.value = getJokes()
+                _jokes.value = loadJokesLocal()
                 _isLoading.value = false
             }
         }
@@ -92,7 +88,7 @@ class JokesListViewModel(
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 addJoke(joke)
-                _jokes.value = getJokes()
+                _jokes.value = loadJokesLocal()
             }
         }
     }

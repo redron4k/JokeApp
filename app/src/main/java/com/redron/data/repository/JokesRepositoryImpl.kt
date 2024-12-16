@@ -36,7 +36,8 @@ class JokesRepositoryImpl(
         cacheDataSource.saveJokes(jokes)
     }
 
-    override suspend fun loadJokesFromCache(criticalTime: Long): List<Joke> {
+    override suspend fun loadActualJokesFromCache(criticalTime: Long): List<Joke> {
+        clearExpiredCache(criticalTime)
         return cacheDataSource.loadJokes(criticalTime)
     }
 
