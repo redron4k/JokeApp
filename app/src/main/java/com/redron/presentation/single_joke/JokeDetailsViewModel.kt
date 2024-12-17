@@ -7,8 +7,9 @@ import com.redron.domain.usecases.GetJokeUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class JokeDetailsViewModel(
+class JokeDetailsViewModel @Inject constructor(
     private val getJoke: GetJokeUseCase
 ) : ViewModel() {
     private val _joke = MutableStateFlow<Joke?>(null)

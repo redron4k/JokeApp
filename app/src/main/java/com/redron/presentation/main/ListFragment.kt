@@ -36,7 +36,7 @@ class ListFragment : Fragment(R.layout.fragment_list) {
 
     private lateinit var binding: FragmentListBinding
 
-
+    @delegate:Inject
     private val viewModel: JokesListViewModel by viewModels(
         ownerProducer = { requireActivity() },
         factoryProducer = {
@@ -65,7 +65,7 @@ class ListFragment : Fragment(R.layout.fragment_list) {
         }
     )
 
-    private val adapter = JokesListAdapter (
+    private val adapter = JokesListAdapter(
         clickListener = {
             findNavController().navigate(
                 ListFragmentDirections.actionListFragmentToJokeDetailsFragment(it)

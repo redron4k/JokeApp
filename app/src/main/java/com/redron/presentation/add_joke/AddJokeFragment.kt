@@ -26,12 +26,14 @@ import com.redron.domain.usecases.LoadJokesFromCacheUseCase
 import com.redron.domain.usecases.LoadJokesFromNetUseCase
 import com.redron.domain.usecases.RemoveFromFavoritesUseCase
 import com.redron.presentation.main.JokesListViewModel
+import javax.inject.Inject
 
 
 class AddJokeFragment : Fragment(R.layout.fragment_add_joke) {
 
     private lateinit var binding: FragmentAddJokeBinding
 
+    @delegate:Inject
     private val viewModel: JokesListViewModel by viewModels(
         ownerProducer = { requireActivity() },
         factoryProducer = {
