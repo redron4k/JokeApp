@@ -12,4 +12,10 @@ interface LocalJokesDataSource {
     suspend fun getJoke(id: String): Joke?
 
     suspend fun clearLoaded()
+
+    suspend fun addToFavorites(uuid: String)
+
+    suspend fun removeFromFavorites(uuid: String)
+
+    suspend fun getFavorites(): List<Joke>
 }

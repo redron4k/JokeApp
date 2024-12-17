@@ -2,8 +2,8 @@ package com.redron.di
 
 //import android.content.Context
 //import com.redron.di.modules.DataBindsModule
-//import com.redron.di.modules.DataModule
-//import com.redron.di.modules.DomainModule
+//import com.redron.di.modules.DataDbModule
+//import com.redron.di.modules.DataNetworkModule
 //import com.redron.di.modules.PresentationModule
 //import com.redron.presentation.add_joke.AddJokeFragment
 //import com.redron.presentation.main.ListFragment
@@ -16,8 +16,8 @@ package com.redron.di
 //@Component(
 //    modules = [
 //        DataBindsModule::class,
-//        DataModule::class,
-//        DomainModule::class,
+//        DataDbModule::class,
+//        DataNetworkModule::class,
 //        PresentationModule::class
 //    ]
 //)

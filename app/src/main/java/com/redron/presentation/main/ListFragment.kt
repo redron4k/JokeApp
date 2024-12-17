@@ -22,10 +22,12 @@ import com.redron.data.repository.JokesRepositoryImpl
 import com.redron.databinding.FragmentListBinding
 import com.redron.domain.usecases.AddJokeUseCase
 import com.redron.domain.usecases.AddJokesUseCase
+import com.redron.domain.usecases.AddToFavoritesUseCase
 import com.redron.domain.usecases.ClearLoadedJokesUseCase
 import com.redron.domain.usecases.LoadJokesLocalUseCase
 import com.redron.domain.usecases.LoadJokesFromCacheUseCase
 import com.redron.domain.usecases.LoadJokesFromNetUseCase
+import com.redron.domain.usecases.RemoveFromFavoritesUseCase
 import com.redron.presentation.main.recycler.JokesListAdapter
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -53,7 +55,9 @@ class ListFragment : Fragment(R.layout.fragment_list) {
                             AddJokesUseCase(repository),
                             LoadJokesFromCacheUseCase(repository),
                             ClearLoadedJokesUseCase(repository),
-                            LoadJokesFromNetUseCase(repository)
+                            LoadJokesFromNetUseCase(repository),
+                            AddToFavoritesUseCase(repository),
+                            RemoveFromFavoritesUseCase(repository)
                         )
                     }
                 )
@@ -61,11 +65,17 @@ class ListFragment : Fragment(R.layout.fragment_list) {
         }
     )
 
-    private val adapter = JokesListAdapter {
-        findNavController().navigate(
-            ListFragmentDirections.actionListFragmentToJokeDetailsFragment(it)
-        )
-    }
+    private val adapter = JokesListAdapter (
+        clickListener = {
+            findNavController().navigate(
+                ListFragmentDirections.actionListFragmentToJokeDetailsFragment(it)
+            )
+        },
+
+        favClickListener = {
+            viewModel.onFavClicked(it)
+        }
+    )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

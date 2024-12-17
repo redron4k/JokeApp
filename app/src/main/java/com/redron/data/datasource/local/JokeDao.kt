@@ -16,6 +16,15 @@ interface JokeDao {
     @Query("SELECT * FROM jokes")
     suspend fun getAll(): List<JokeEntity>
 
-    @Query("DELETE FROM jokes WHERE isFromNet=1")
+    @Query("SELECT * FROM jokes WHERE isFavorite=1")
+    suspend fun getFavorite(): List<JokeEntity>
+
+    @Query("DELETE FROM jokes WHERE isFromNet=1 AND isFavorite=0")
     suspend fun clearLoaded()
+
+    @Query("UPDATE jokes SET isFavorite=1 WHERE id=:uuid")
+    suspend fun setFavorite(uuid: String)
+
+    @Query("UPDATE jokes SET isFavorite=0 WHERE id=:uuid")
+    suspend fun setUnFavorite(uuid: String)
 }

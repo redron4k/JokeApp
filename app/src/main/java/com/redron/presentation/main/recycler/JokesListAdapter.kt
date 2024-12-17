@@ -8,14 +8,15 @@ import com.redron.databinding.JokeItemBinding
 import com.redron.presentation.main.recycler.util.JokeItemCallback
 
 class JokesListAdapter(
-    private val clickListener: (String) -> Unit
+    private val clickListener: (String) -> Unit,
+    private val favClickListener: (Joke) -> Unit
 ) :
     ListAdapter<Joke, JokesViewHolder>(JokeItemCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): JokesViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         val binding = JokeItemBinding.inflate(inflater, parent, false)
-        return JokesViewHolder(binding, clickListener)
+        return JokesViewHolder(binding, clickListener, favClickListener)
     }
 
     override fun getItemCount() = currentList.size

@@ -16,5 +16,7 @@ data class JokeEntity(
     @ColumnInfo("category")
     val category: String,
     @ColumnInfo("isFromNet")
-    val isFromNet: Boolean = true
+    val isFromNet: Boolean = true,
+    @ColumnInfo("isFavorite")
+    val isFavorite: Boolean = false
 )

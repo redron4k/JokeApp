@@ -39,4 +39,16 @@ class LocalJokesDataSourceImpl @Inject constructor(private val database: JokesDa
     override suspend fun clearLoaded() {
         database.jokeDao().clearLoaded()
     }
+
+    override suspend fun addToFavorites(uuid: String) {
+        database.jokeDao().setFavorite(uuid)
+    }
+
+    override suspend fun removeFromFavorites(uuid: String) {
+        database.jokeDao().setUnFavorite(uuid)
+    }
+
+    override suspend fun getFavorites(): List<Joke> {
+        return database.jokeDao().getFavorite().map { JokeEntityMapper.mapJoke(it) }
+    }
 }

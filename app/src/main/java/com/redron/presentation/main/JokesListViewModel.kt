@@ -5,10 +5,12 @@ import androidx.lifecycle.viewModelScope
 import com.redron.domain.entity.Joke
 import com.redron.domain.usecases.AddJokeUseCase
 import com.redron.domain.usecases.AddJokesUseCase
+import com.redron.domain.usecases.AddToFavoritesUseCase
 import com.redron.domain.usecases.ClearLoadedJokesUseCase
 import com.redron.domain.usecases.LoadJokesLocalUseCase
 import com.redron.domain.usecases.LoadJokesFromCacheUseCase
 import com.redron.domain.usecases.LoadJokesFromNetUseCase
+import com.redron.domain.usecases.RemoveFromFavoritesUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -23,7 +25,9 @@ class JokesListViewModel @Inject constructor(
     private val addJokes: AddJokesUseCase,
     private val loadJokesFromCache: LoadJokesFromCacheUseCase,
     private val clearLoadedJokes: ClearLoadedJokesUseCase,
-    private val loadJokesFromNet: LoadJokesFromNetUseCase
+    private val loadJokesFromNet: LoadJokesFromNetUseCase,
+    private val addToFavorites: AddToFavoritesUseCase,
+    private val removeFromFavorites: RemoveFromFavoritesUseCase
 ) : ViewModel() {
 
     private val _jokes = MutableStateFlow<List<Joke>>(emptyList())
@@ -93,6 +97,19 @@ class JokesListViewModel @Inject constructor(
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 clearLoadedJokes()
+            }
+        }
+    }
+
+    fun onFavClicked(joke: Joke) {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                if (joke.isFavorite) {
+                    removeFromFavorites(joke.uuid)
+                } else {
+                    addToFavorites(joke.uuid)
+                }
+                _jokes.value = loadJokesLocal()
             }
         }
     }

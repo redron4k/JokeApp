@@ -10,7 +10,8 @@ object JokeEntityMapper {
                 jokeAnswer = delivery,
                 category = category,
                 uuid = uuid,
-                isFromNet = isFromNet)
+                isFromNet = isFromNet,
+                isFavorite = isFavorite)
         }
     }
 }

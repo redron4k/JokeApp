@@ -19,10 +19,12 @@ import com.redron.data.repository.JokesRepositoryImpl
 import com.redron.databinding.FragmentAddJokeBinding
 import com.redron.domain.usecases.AddJokeUseCase
 import com.redron.domain.usecases.AddJokesUseCase
+import com.redron.domain.usecases.AddToFavoritesUseCase
 import com.redron.domain.usecases.ClearLoadedJokesUseCase
 import com.redron.domain.usecases.LoadJokesLocalUseCase
 import com.redron.domain.usecases.LoadJokesFromCacheUseCase
 import com.redron.domain.usecases.LoadJokesFromNetUseCase
+import com.redron.domain.usecases.RemoveFromFavoritesUseCase
 import com.redron.presentation.main.JokesListViewModel
 
 
@@ -48,7 +50,9 @@ class AddJokeFragment : Fragment(R.layout.fragment_add_joke) {
                             AddJokesUseCase(repository),
                             LoadJokesFromCacheUseCase(repository),
                             ClearLoadedJokesUseCase(repository),
-                            LoadJokesFromNetUseCase(repository)
+                            LoadJokesFromNetUseCase(repository),
+                            AddToFavoritesUseCase(repository),
+                            RemoveFromFavoritesUseCase(repository)
                         )
                     }
                 )

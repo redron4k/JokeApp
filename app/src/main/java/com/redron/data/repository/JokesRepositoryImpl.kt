@@ -55,4 +55,16 @@ class JokesRepositoryImpl @Inject constructor(
     override suspend fun loadJokesFromNet(): List<Joke> {
         return remoteDataSource.getJokes()
     }
+
+    override suspend fun addToFavorites(uuid: String) {
+        localDataSource.addToFavorites(uuid)
+    }
+
+    override suspend fun removeFromFavorites(uuid: String) {
+        localDataSource.removeFromFavorites(uuid)
+    }
+
+    override suspend fun getFavorites(): List<Joke> {
+        return localDataSource.getFavorites()
+    }
 }
