@@ -6,12 +6,14 @@ import com.redron.domain.entity.Joke
 object JokeEntityMapper {
     fun mapJoke(joke: JokeEntity): Joke {
         return with(joke) {
-            Joke(jokeQuestion = setup,
+            Joke(
+                jokeQuestion = setup,
                 jokeAnswer = delivery,
                 category = category,
                 uuid = uuid,
                 isFromNet = isFromNet,
-                isFavorite = isFavorite)
+                isFavorite = isFavorite,
+            )
         }
     }
 }

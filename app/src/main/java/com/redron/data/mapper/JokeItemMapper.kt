@@ -12,7 +12,7 @@ object JokeItemMapper {
                 setup = jokeQuestion,
                 delivery = jokeAnswer,
                 category = category,
-                isFromNet = isFromNet
+                isFromNet = isFromNet,
             )
         }
     }
@@ -24,7 +24,7 @@ object JokeItemMapper {
                 setup = jokeQuestion,
                 delivery = jokeAnswer,
                 category = category,
-                dumpTime = System.currentTimeMillis()
+                dumpTime = System.currentTimeMillis(),
             )
         }
     }

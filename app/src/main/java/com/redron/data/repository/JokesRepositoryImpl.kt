@@ -13,11 +13,6 @@ class JokesRepositoryImpl @Inject constructor(
     private val localDataSource: LocalJokesDataSource,
     private val remoteDataSource: RemoteJokesDataSource
 ) : JokesRepository {
-
-    companion object {
-        private val EXPIRATION_TIME = TimeUnit.HOURS.toMillis(24)
-    }
-
     override suspend fun addJoke(joke: Joke) {
         localDataSource.addJoke(joke)
     }
@@ -64,7 +59,7 @@ class JokesRepositoryImpl @Inject constructor(
         localDataSource.removeFromFavorites(uuid)
     }
 
-    override suspend fun getFavorites(): List<Joke> {
-        return localDataSource.getFavorites()
+    companion object {
+        private val EXPIRATION_TIME = TimeUnit.HOURS.toMillis(24)
     }
 }

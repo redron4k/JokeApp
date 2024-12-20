@@ -8,6 +8,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.ViewModelInitializer
 import androidx.navigation.fragment.findNavController
+import com.redron.App
 import com.redron.R
 import com.redron.data.datasource.local.CacheJokesDataSourceImpl
 import com.redron.domain.entity.Joke
@@ -25,6 +26,7 @@ import com.redron.domain.usecases.LoadJokesLocalUseCase
 import com.redron.domain.usecases.LoadJokesFromCacheUseCase
 import com.redron.domain.usecases.LoadJokesFromNetUseCase
 import com.redron.domain.usecases.RemoveFromFavoritesUseCase
+import com.redron.presentation.main.JokeListViewModelFactory
 import com.redron.presentation.main.JokesListViewModel
 import javax.inject.Inject
 
@@ -33,34 +35,19 @@ class AddJokeFragment : Fragment(R.layout.fragment_add_joke) {
 
     private lateinit var binding: FragmentAddJokeBinding
 
-    @delegate:Inject
+    @Inject
+    lateinit var viewModelFactory: JokeListViewModelFactory
+
     private val viewModel: JokesListViewModel by viewModels(
         ownerProducer = { requireActivity() },
-        factoryProducer = {
-            ViewModelProvider.Factory.from(
-                ViewModelInitializer(
-                    clazz = JokesListViewModel::class.java,
-                    initializer = {
-                        val repository = JokesRepositoryImpl(
-                            CacheJokesDataSourceImpl(JokesDatabase.INSTANCE!!),
-                            LocalJokesDataSourceImpl(JokesDatabase.INSTANCE!!),
-                            RemoteJokesDataSourceImpl(RetrofitInstance.retrofitClient)
-                        )
-                        JokesListViewModel(
-                            LoadJokesLocalUseCase(repository),
-                            AddJokeUseCase(repository),
-                            AddJokesUseCase(repository),
-                            LoadJokesFromCacheUseCase(repository),
-                            ClearLoadedJokesUseCase(repository),
-                            LoadJokesFromNetUseCase(repository),
-                            AddToFavoritesUseCase(repository),
-                            RemoveFromFavoritesUseCase(repository)
-                        )
-                    }
-                )
-            )
-        }
+        factoryProducer = { viewModelFactory },
     )
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        (requireActivity().application as App).appComponent.inject(this)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

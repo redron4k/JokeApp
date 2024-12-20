@@ -27,7 +27,7 @@ class JokesListViewModel @Inject constructor(
     private val clearLoadedJokes: ClearLoadedJokesUseCase,
     private val loadJokesFromNet: LoadJokesFromNetUseCase,
     private val addToFavorites: AddToFavoritesUseCase,
-    private val removeFromFavorites: RemoveFromFavoritesUseCase
+    private val removeFromFavorites: RemoveFromFavoritesUseCase,
 ) : ViewModel() {
 
     private val _jokes = MutableStateFlow<List<Joke>>(emptyList())

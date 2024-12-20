@@ -26,7 +26,7 @@ class LocalJokesDataSourceImpl @Inject constructor(private val database: JokesDa
         return database.jokeDao().getAll().find {
             it.uuid == id
         }?.let {
-            Joke(it.setup, it.delivery, it.category, isFromNet = false)
+            JokeEntityMapper.mapJoke(it)
         }
     }
 

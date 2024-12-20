@@ -18,7 +18,7 @@ import javax.inject.Singleton
         DataBindsModule::class,
         DataDbModule::class,
         DataNetworkModule::class,
-        PresentationModule::class
+        PresentationModule::class,
     ]
 )
 interface AppComponent {

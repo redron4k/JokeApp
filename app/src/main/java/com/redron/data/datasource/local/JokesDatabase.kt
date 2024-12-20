@@ -27,7 +27,7 @@ abstract class JokesDatabase : RoomDatabase() {
                         instance = Room.databaseBuilder(
                             context.applicationContext,
                             JokesDatabase::class.java,
-                            "jokes_database"
+                            "jokes_database",
                         ).build()
                         INSTANCE = instance
                     }

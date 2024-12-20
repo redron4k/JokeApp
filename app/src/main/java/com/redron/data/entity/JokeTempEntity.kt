@@ -16,5 +16,5 @@ data class JokeTempEntity(
     @ColumnInfo("category")
     val category: String,
     @ColumnInfo("dumpTime")
-    val dumpTime: Long
+    val dumpTime: Long,
 )

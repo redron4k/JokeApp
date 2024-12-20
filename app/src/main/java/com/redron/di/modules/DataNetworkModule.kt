@@ -13,11 +13,6 @@ import javax.inject.Singleton
 
 @Module
 class DataNetworkModule {
-
-    companion object {
-        private const val BASE_URL = "https://v2.jokeapi.dev/"
-    }
-
     @Provides
     @Singleton
     fun provideRetrofit(): Retrofit {
@@ -40,5 +35,9 @@ class DataNetworkModule {
             isLenient = true
         }
         return json.asConverterFactory(contentType)
+    }
+
+    companion object {
+        private const val BASE_URL = "https://v2.jokeapi.dev/"
     }
 }

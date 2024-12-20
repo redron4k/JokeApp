@@ -12,6 +12,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
+import com.redron.App
 import com.redron.R
 import com.redron.data.datasource.local.CacheJokesDataSourceImpl
 import com.redron.data.datasource.remote.RetrofitInstance
@@ -36,33 +37,12 @@ class ListFragment : Fragment(R.layout.fragment_list) {
 
     private lateinit var binding: FragmentListBinding
 
-    @delegate:Inject
+    @Inject
+    lateinit var viewModelFactory: JokeListViewModelFactory
+
     private val viewModel: JokesListViewModel by viewModels(
         ownerProducer = { requireActivity() },
-        factoryProducer = {
-            ViewModelProvider.Factory.from(
-                ViewModelInitializer(
-                    clazz = JokesListViewModel::class.java,
-                    initializer = {
-                        val repository = JokesRepositoryImpl(
-                            CacheJokesDataSourceImpl(JokesDatabase.INSTANCE!!),
-                            LocalJokesDataSourceImpl(JokesDatabase.INSTANCE!!),
-                            RemoteJokesDataSourceImpl(RetrofitInstance.retrofitClient)
-                        )
-                        JokesListViewModel(
-                            LoadJokesLocalUseCase(repository),
-                            AddJokeUseCase(repository),
-                            AddJokesUseCase(repository),
-                            LoadJokesFromCacheUseCase(repository),
-                            ClearLoadedJokesUseCase(repository),
-                            LoadJokesFromNetUseCase(repository),
-                            AddToFavoritesUseCase(repository),
-                            RemoveFromFavoritesUseCase(repository)
-                        )
-                    }
-                )
-            )
-        }
+        factoryProducer = { viewModelFactory },
     )
 
     private val adapter = JokesListAdapter(
@@ -80,6 +60,7 @@ class ListFragment : Fragment(R.layout.fragment_list) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        (requireActivity().application as App).appComponent.inject(this)
         viewModel.clearLoaded()
 
         savedInstanceState ?: run {

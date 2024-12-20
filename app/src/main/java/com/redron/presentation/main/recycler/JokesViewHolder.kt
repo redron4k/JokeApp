@@ -9,17 +9,18 @@ import com.redron.R
 class JokesViewHolder(
     private val binding: JokeItemBinding,
     private val clickListener: (String) -> Unit,
-    private val favClickListener: (Joke) -> Unit
+    private val favClickListener: (Joke) -> Unit,
 ) : RecyclerView.ViewHolder(binding.root) {
 
     fun bind(joke: Joke) {
         binding.textViewQuestion.text = joke.jokeQuestion
         binding.textViewAnswer.text = joke.jokeAnswer
         binding.textViewCategory.text = joke.category
-        binding.textViewFromNet.text = if (joke.isFromNet)
+        binding.textViewFromNet.text = if (joke.isFromNet) {
             binding.root.context.getString(R.string.is_from_net_true)
-        else
+        } else {
             binding.root.context.getString(R.string.is_from_net_false)
+        }
         setImageRes(joke)
 
         binding.root.setOnClickListener {
@@ -47,5 +48,4 @@ class JokesViewHolder(
             )
         }
     }
-
 }

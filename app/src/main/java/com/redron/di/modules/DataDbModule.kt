@@ -11,11 +11,6 @@ import javax.inject.Singleton
 
 @Module
 class DataDbModule {
-
-    companion object {
-        private const val DB_NAME = "jokes_database"
-    }
-
     @Provides
     @Singleton
     fun provideDatabase(context: Context): JokesDatabase {
@@ -36,5 +31,9 @@ class DataDbModule {
     @Singleton
     fun provideJokeTempDao(database: JokesDatabase): JokeTempDao {
         return database.jokeTempDao()
+    }
+
+    companion object {
+        private const val DB_NAME = "jokes_database"
     }
 }

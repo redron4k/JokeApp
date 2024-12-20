@@ -13,5 +13,5 @@ data class Joke(
     val category: String,
     val uuid: String = UUID.randomUUID().toString(),
     val isFromNet: Boolean = true,
-    val isFavorite: Boolean = false
+    val isFavorite: Boolean = false,
 )
