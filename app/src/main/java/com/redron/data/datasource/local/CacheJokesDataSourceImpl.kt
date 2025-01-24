@@ -1,7 +1,7 @@
 package com.redron.data.datasource.local
 
 import com.redron.data.mapper.JokeItemMapper
-import com.redron.data.mapper.JokeTempEntityMapper
+import com.redron.data.mapper.JokeEntityCacheMapper
 import com.redron.domain.entity.Joke
 import javax.inject.Inject
 
@@ -19,7 +19,7 @@ class CacheJokesDataSourceImpl @Inject constructor(private val database: JokesDa
 
     override suspend fun loadJokes(criticalTime: Long): List<Joke> {
         return database.jokeTempDao().getAll(criticalTime).map {
-            JokeTempEntityMapper.mapJoke(it)
+            JokeEntityCacheMapper.mapJoke(it)
         }
     }
 

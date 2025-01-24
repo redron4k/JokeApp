@@ -4,10 +4,10 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.redron.data.entity.JokeEntity
-import com.redron.data.entity.JokeTempEntity
+import com.redron.data.entity.JokeEntityLocal
+import com.redron.data.entity.JokeEntityCache
 
-@Database(entities = [JokeEntity::class, JokeTempEntity::class], version = 1)
+@Database(entities = [JokeEntityLocal::class, JokeEntityCache::class], version = 1)
 abstract class JokesDatabase : RoomDatabase() {
 
     abstract fun jokeDao(): JokeDao

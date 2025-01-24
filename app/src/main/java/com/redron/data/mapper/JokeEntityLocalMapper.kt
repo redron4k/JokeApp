@@ -1,10 +1,10 @@
 package com.redron.data.mapper
 
-import com.redron.data.entity.JokeEntity
+import com.redron.data.entity.JokeEntityLocal
 import com.redron.domain.entity.Joke
 
-object JokeEntityMapper {
-    fun mapJoke(joke: JokeEntity): Joke {
+object JokeEntityLocalMapper {
+    fun mapJoke(joke: JokeEntityLocal): Joke {
         return with(joke) {
             Joke(
                 jokeQuestion = setup,

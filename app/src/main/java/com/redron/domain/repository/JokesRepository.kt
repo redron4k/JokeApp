@@ -19,6 +19,8 @@ interface JokesRepository {
 
     suspend fun clearExpiredCache(criticalTime: Long)
 
+    suspend fun refreshCache()
+
     suspend fun loadJokesFromNet(): List<Joke>
 
     suspend fun addToFavorites(uuid: String)

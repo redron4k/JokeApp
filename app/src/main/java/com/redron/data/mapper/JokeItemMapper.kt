@@ -1,13 +1,13 @@
 package com.redron.data.mapper
 
-import com.redron.data.entity.JokeEntity
-import com.redron.data.entity.JokeTempEntity
+import com.redron.data.entity.JokeEntityLocal
+import com.redron.data.entity.JokeEntityCache
 import com.redron.domain.entity.Joke
 
 object JokeItemMapper {
-    fun mapEntity(joke: Joke): JokeEntity {
+    fun mapEntity(joke: Joke): JokeEntityLocal {
         return with(joke) {
-            JokeEntity(
+            JokeEntityLocal(
                 uuid = uuid,
                 setup = jokeQuestion,
                 delivery = jokeAnswer,
@@ -17,9 +17,9 @@ object JokeItemMapper {
         }
     }
 
-    fun mapTempEntity(joke: Joke): JokeTempEntity {
+    fun mapTempEntity(joke: Joke): JokeEntityCache {
         return with(joke) {
-            JokeTempEntity(
+            JokeEntityCache(
                 uuid = uuid,
                 setup = jokeQuestion,
                 delivery = jokeAnswer,

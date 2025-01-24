@@ -2,9 +2,9 @@ package com.redron.presentation.main.recycler
 
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.recyclerview.widget.RecyclerView
-import com.redron.domain.entity.Joke
-import com.redron.databinding.JokeItemBinding
 import com.redron.R
+import com.redron.databinding.JokeItemBinding
+import com.redron.domain.entity.Joke
 
 class JokesViewHolder(
     private val binding: JokeItemBinding,
@@ -13,37 +13,40 @@ class JokesViewHolder(
 ) : RecyclerView.ViewHolder(binding.root) {
 
     fun bind(joke: Joke) {
-        binding.textViewQuestion.text = joke.jokeQuestion
-        binding.textViewAnswer.text = joke.jokeAnswer
-        binding.textViewCategory.text = joke.category
-        binding.textViewFromNet.text = if (joke.isFromNet) {
-            binding.root.context.getString(R.string.is_from_net_true)
-        } else {
-            binding.root.context.getString(R.string.is_from_net_false)
-        }
-        setImageRes(joke)
-
-        binding.root.setOnClickListener {
-            clickListener(joke.uuid)
-        }
-
-        binding.imageButton.setOnClickListener {
+        with(binding) {
+            textViewQuestion.text = joke.jokeQuestion
+            textViewAnswer.text = joke.jokeAnswer
+            textViewCategory.text = joke.category
+            textViewFromNet.text = if (joke.isFromNet) {
+                root.context.getString(R.string.is_from_net_true)
+            } else {
+                root.context.getString(R.string.is_from_net_false)
+            }
             setImageRes(joke)
-            favClickListener(joke)
+
+            root.setOnClickListener {
+                clickListener(joke.uuid)
+            }
+
+            imageButton.setOnClickListener {
+                setImageRes(joke)
+                favClickListener(joke)
+            }
         }
+
     }
 
-    private fun setImageRes(joke: Joke) {
+    private fun JokeItemBinding.setImageRes(joke: Joke) {
         if (joke.isFavorite) {
-            binding.imageButton.setImageDrawable(
+            imageButton.setImageDrawable(
                 AppCompatResources.getDrawable(
-                    binding.root.context, R.mipmap.ic_btn_star_on
+                    root.context, R.drawable.ic_btn_favorite_on_green_100
                 )
             )
         } else {
-            binding.imageButton.setImageDrawable(
+            imageButton.setImageDrawable(
                 AppCompatResources.getDrawable(
-                    binding.root.context, R.mipmap.ic_btn_star_off
+                    root.context, R.drawable.ic_btn_favorite_off_green_100
                 )
             )
         }

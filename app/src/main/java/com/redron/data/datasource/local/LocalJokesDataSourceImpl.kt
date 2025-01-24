@@ -1,7 +1,7 @@
 package com.redron.data.datasource.local
 
 import com.redron.domain.entity.Joke
-import com.redron.data.mapper.JokeEntityMapper
+import com.redron.data.mapper.JokeEntityLocalMapper
 import com.redron.data.mapper.JokeItemMapper
 import javax.inject.Inject
 
@@ -26,14 +26,14 @@ class LocalJokesDataSourceImpl @Inject constructor(private val database: JokesDa
         return database.jokeDao().getAll().find {
             it.uuid == id
         }?.let {
-            JokeEntityMapper.mapJoke(it)
+            JokeEntityLocalMapper.mapJoke(it)
         }
     }
 
     override suspend fun getJokes(): List<Joke> {
         return database.jokeDao().getAll().map {
-            JokeEntityMapper.mapJoke(it)
-        }.sortedBy { it.isFromNet }
+            JokeEntityLocalMapper.mapJoke(it)
+        }.sortedWith(compareBy<Joke> { !it.isFavorite }.thenBy { it.isFromNet } )
     }
 
     override suspend fun clearLoaded() {
@@ -49,6 +49,6 @@ class LocalJokesDataSourceImpl @Inject constructor(private val database: JokesDa
     }
 
     override suspend fun getFavorites(): List<Joke> {
-        return database.jokeDao().getFavorite().map { JokeEntityMapper.mapJoke(it) }
+        return database.jokeDao().getFavorite().map { JokeEntityLocalMapper.mapJoke(it) }
     }
 }

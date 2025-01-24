@@ -47,6 +47,10 @@ class JokesRepositoryImpl @Inject constructor(
         cacheDataSource.clearExpired(criticalTime)
     }
 
+    override suspend fun refreshCache() {
+        addJokes(loadActualJokesFromCache())
+    }
+
     override suspend fun loadJokesFromNet(): List<Joke> {
         return remoteDataSource.getJokes()
     }

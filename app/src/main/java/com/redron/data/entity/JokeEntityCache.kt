@@ -5,7 +5,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity(tableName = "jokesTemp")
-data class JokeTempEntity(
+data class JokeEntityCache(
     @PrimaryKey()
     @ColumnInfo("id")
     val uuid: String,

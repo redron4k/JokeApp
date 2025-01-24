@@ -3,7 +3,6 @@ package com.redron.presentation.single_joke
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.redron.domain.usecases.GetJokeUseCase
-import com.redron.presentation.main.JokesListViewModel
 import javax.inject.Inject
 
 class JokeDetailsViewModelFactory @Inject constructor(
