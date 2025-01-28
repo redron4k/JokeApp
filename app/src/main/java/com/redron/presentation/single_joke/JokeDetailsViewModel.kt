@@ -8,6 +8,7 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -19,7 +20,7 @@ class JokeDetailsViewModel @Inject constructor(
     val joke: StateFlow<Joke?> = _joke.asStateFlow()
 
     private val _error = MutableSharedFlow<String?>()
-    val error: SharedFlow<String?> = _error
+    val error: SharedFlow<String?> = _error.asSharedFlow()
 
     fun loadSingleJoke(jokeId: String) {
         viewModelScope.launch {

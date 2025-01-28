@@ -7,8 +7,8 @@ import com.redron.domain.usecases.AddJokeUseCase
 import com.redron.domain.usecases.AddJokesUseCase
 import com.redron.domain.usecases.AddToFavoritesUseCase
 import com.redron.domain.usecases.ClearLoadedJokesUseCase
-import com.redron.domain.usecases.LoadJokesLocalUseCase
 import com.redron.domain.usecases.LoadJokesFromNetUseCase
+import com.redron.domain.usecases.LoadJokesLocalUseCase
 import com.redron.domain.usecases.RefreshCacheUseCase
 import com.redron.domain.usecases.RemoveFromFavoritesUseCase
 import kotlinx.coroutines.Dispatchers
@@ -16,10 +16,10 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class JokesListViewModel @Inject constructor(
@@ -37,10 +37,10 @@ class JokesListViewModel @Inject constructor(
     val jokesState: StateFlow<JokesListState> = _jokesState.asStateFlow()
 
     private val _error = MutableSharedFlow<String?>()
-    val error: SharedFlow<String?> = _error
+    val error: SharedFlow<String?> = _error.asSharedFlow()
 
     private val _isLoadFromCache = MutableStateFlow<Boolean>(false)
-    val isLoadFromCache: StateFlow<Boolean> = _isLoadFromCache
+    val isLoadFromCache: StateFlow<Boolean> = _isLoadFromCache.asStateFlow()
 
     fun initJokes() {
         if (_jokesState.value.isLoading) return

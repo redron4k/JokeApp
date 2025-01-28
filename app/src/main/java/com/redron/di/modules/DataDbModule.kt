@@ -13,7 +13,8 @@ import javax.inject.Singleton
 class DataDbModule {
     @Provides
     @Singleton
-    fun provideDatabase(context: Context): JokesDatabase {
+    fun provideDatabase(
+        context: Context): JokesDatabase {
         return Room.databaseBuilder(
             context.applicationContext,
             JokesDatabase::class.java,

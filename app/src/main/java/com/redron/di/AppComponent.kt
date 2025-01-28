@@ -4,7 +4,7 @@ import android.content.Context
 import com.redron.di.modules.DataBindsModule
 import com.redron.di.modules.DataDbModule
 import com.redron.di.modules.DataNetworkModule
-import com.redron.di.modules.PresentationModule
+import com.redron.di.modules.DomainBindsModule
 import com.redron.presentation.add_joke.AddJokeFragment
 import com.redron.presentation.main.ListFragment
 import com.redron.presentation.single_joke.JokeDetailsFragment
@@ -18,7 +18,7 @@ import javax.inject.Singleton
         DataBindsModule::class,
         DataDbModule::class,
         DataNetworkModule::class,
-        PresentationModule::class,
+        DomainBindsModule::class,
     ]
 )
 interface AppComponent {
