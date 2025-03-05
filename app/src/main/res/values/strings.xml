@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">My First App</string>
+    <string name="app_name">JokeApp</string>
     <string name="floating_button_content">Add new Joke</string>
     <string name="add_joke_title">Введите анекдот</string>
     <string name="addJokeButton_text">Добавить анекдот</string>
