@@ -12,7 +12,7 @@ class CacheJokesDataSourceImpl @Inject constructor(private val database: JokesDa
         database.jokeTempDao().clearAll()
         database.jokeTempDao().insertAll(
             jokes.map {
-                JokeItemMapper.mapTempEntity(it)
+                JokeItemMapper.mapJokeEntityCache(it)
             }
         )
     }

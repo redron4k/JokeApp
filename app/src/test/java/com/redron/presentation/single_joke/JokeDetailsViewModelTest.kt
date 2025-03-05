@@ -4,8 +4,7 @@ import com.redron.domain.entity.Joke
 import com.redron.domain.usecases.GetJokeUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.advanceUntilIdle
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
@@ -22,7 +21,7 @@ class JokeDetailsViewModelTest {
 
     private val getJoke = mock<GetJokeUseCase>()
 
-    private val dispatcher = StandardTestDispatcher()
+    private val dispatcher = UnconfinedTestDispatcher()
 
     private lateinit var viewModel: JokeDetailsViewModel
 
@@ -43,11 +42,9 @@ class JokeDetailsViewModelTest {
             "answer",
             "category",
         )
-
         whenever(getJoke.invoke(joke.uuid)).thenReturn(joke)
 
         viewModel.loadSingleJoke(joke.uuid)
-        advanceUntilIdle()
 
         verify(getJoke).invoke(joke.uuid)
         assertEquals(joke, viewModel.joke.value)

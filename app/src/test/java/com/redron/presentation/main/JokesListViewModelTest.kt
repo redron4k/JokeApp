@@ -12,7 +12,6 @@ import com.redron.domain.usecases.RemoveFromFavoritesUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
-import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
@@ -78,7 +77,6 @@ class JokesListViewModelTest {
         whenever(loadJokesLocal.invoke()).thenReturn(testJokes)
 
         viewModel.initJokes()
-        advanceUntilIdle()
 
         verify(addJokes).invoke(testJokes)
         assertEquals(testJokes, viewModel.jokesState.value.jokes)
@@ -104,7 +102,6 @@ class JokesListViewModelTest {
         whenever(loadJokesLocal.invoke()).thenReturn(testJokes)
 
         viewModel.initJokes()
-        advanceUntilIdle()
 
         verify(refreshCache).invoke()
         assertEquals(testJokes, viewModel.jokesState.value.jokes)
@@ -138,7 +135,6 @@ class JokesListViewModelTest {
         whenever(loadJokesLocal.invoke()).thenReturn(initJokes + loadedJokes)
 
         viewModel.loadMoreJokes()
-        advanceUntilIdle()
 
         verify(addJokes).invoke(loadedJokes)
         assertEquals(initJokes + loadedJokes, viewModel.jokesState.value.jokes)
@@ -173,7 +169,6 @@ class JokesListViewModelTest {
         whenever(loadJokesLocal.invoke()).thenReturn(initJokes + cachedJokes)
 
         viewModel.loadMoreJokes()
-        advanceUntilIdle()
 
         verify(refreshCache).invoke()
         assertEquals(initJokes + cachedJokes, viewModel.jokesState.value.jokes)
@@ -209,7 +204,6 @@ class JokesListViewModelTest {
 
         viewModel.loadMoreJokes()   // makes flag isLoadFromCache true
         viewModel.loadMoreJokes()
-        advanceUntilIdle()
 
         verify(refreshCache, times(1)).invoke()
         assertEquals(initJokes + cachedJokes, viewModel.jokesState.value.jokes)
@@ -236,7 +230,6 @@ class JokesListViewModelTest {
         whenever(loadJokesLocal.invoke()).thenReturn(initJokes + newJoke)
 
         viewModel.addNewJoke(newJoke)
-        advanceUntilIdle()
 
         verify(addJoke).invoke(newJoke)
         assertEquals(initJokes + newJoke, viewModel.jokesState.value.jokes)
@@ -253,7 +246,6 @@ class JokesListViewModelTest {
         whenever(loadJokesLocal.invoke()).thenReturn(listOf(initJoke.copy(isFavorite = true)))
 
         viewModel.onFavClicked(initJoke)
-        advanceUntilIdle()
 
         verify(addToFavorites).invoke(initJoke.uuid)
         assertEquals(true, viewModel.jokesState.value.jokes[0].isFavorite)
@@ -271,7 +263,6 @@ class JokesListViewModelTest {
         whenever(loadJokesLocal.invoke()).thenReturn(listOf(initJoke.copy(isFavorite = false)))
 
         viewModel.onFavClicked(initJoke)
-        advanceUntilIdle()
 
         verify(removeFromFavorites).invoke(initJoke.uuid)
         assertEquals(false, viewModel.jokesState.value.jokes[0].isFavorite)

@@ -5,7 +5,7 @@ import com.redron.data.entity.JokeEntityCache
 import com.redron.domain.entity.Joke
 
 object JokeItemMapper {
-    fun mapEntity(joke: Joke): JokeEntityLocal {
+    fun mapJokeEntityLocal(joke: Joke): JokeEntityLocal {
         return with(joke) {
             JokeEntityLocal(
                 uuid = uuid,
@@ -17,7 +17,7 @@ object JokeItemMapper {
         }
     }
 
-    fun mapTempEntity(joke: Joke): JokeEntityCache {
+    fun mapJokeEntityCache(joke: Joke): JokeEntityCache {
         return with(joke) {
             JokeEntityCache(
                 uuid = uuid,

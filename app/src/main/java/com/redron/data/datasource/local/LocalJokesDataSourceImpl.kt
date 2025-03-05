@@ -10,14 +10,14 @@ class LocalJokesDataSourceImpl @Inject constructor(private val database: JokesDa
 
     override suspend fun addJoke(joke: Joke) {
         database.jokeDao().insert(
-            JokeItemMapper.mapEntity(joke)
+            JokeItemMapper.mapJokeEntityLocal(joke)
         )
     }
 
     override suspend fun addJokes(jokes: List<Joke>) {
         database.jokeDao().insertAll(
             jokes.map {
-                JokeItemMapper.mapEntity(it)
+                JokeItemMapper.mapJokeEntityLocal(it)
             }
         )
     }
