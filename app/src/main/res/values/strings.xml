@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">My First App</string>
+    <string name="app_name">JokeApp</string>
     <string name="floating_button_content">Add new Joke</string>
     <string name="add_joke_title">Введите анекдот</string>
     <string name="addJokeButton_text">Добавить анекдот</string>
@@ -10,4 +10,5 @@
     <string name="is_from_net_true">Из сети</string>
     <string name="is_from_net_false">Локально</string>
     <string name="is_load_from_cache_true">Отсутствует соединение с сетью\nАнекдоты восстановлены из кэша</string>
+    <string name="btn_favorite_content_description">btn_favorite</string>
 </resources>

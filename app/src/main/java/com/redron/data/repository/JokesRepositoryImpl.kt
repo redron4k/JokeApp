@@ -6,17 +6,13 @@ import com.redron.data.datasource.local.LocalJokesDataSource
 import com.redron.data.datasource.remote.RemoteJokesDataSource
 import com.redron.domain.repository.JokesRepository
 import java.util.concurrent.TimeUnit
+import javax.inject.Inject
 
-class JokesRepositoryImpl(
+class JokesRepositoryImpl @Inject constructor(
     private val cacheDataSource: CacheJokesDataSource,
     private val localDataSource: LocalJokesDataSource,
     private val remoteDataSource: RemoteJokesDataSource
 ) : JokesRepository {
-
-    companion object {
-        private val EXPIRATION_TIME = TimeUnit.HOURS.toMillis(24)
-    }
-
     override suspend fun addJoke(joke: Joke) {
         localDataSource.addJoke(joke)
     }
@@ -51,7 +47,23 @@ class JokesRepositoryImpl(
         cacheDataSource.clearExpired(criticalTime)
     }
 
+    override suspend fun refreshCache() {
+        addJokes(loadActualJokesFromCache())
+    }
+
     override suspend fun loadJokesFromNet(): List<Joke> {
         return remoteDataSource.getJokes()
+    }
+
+    override suspend fun addToFavorites(uuid: String) {
+        localDataSource.addToFavorites(uuid)
+    }
+
+    override suspend fun removeFromFavorites(uuid: String) {
+        localDataSource.removeFromFavorites(uuid)
+    }
+
+    companion object {
+        private val EXPIRATION_TIME = TimeUnit.HOURS.toMillis(24)
     }
 }

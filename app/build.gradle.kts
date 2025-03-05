@@ -4,6 +4,7 @@ plugins {
     id("androidx.navigation.safeargs")
     kotlin("plugin.serialization") version "2.0.21"
     id("com.google.devtools.ksp") version "1.9.24-1.0.20"
+    id("kotlin-kapt")
 }
 
 android {
@@ -71,7 +72,15 @@ dependencies {
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)
     ksp(libs.androidx.room.compiler)
+    implementation(libs.dagger)
+    kapt(libs.dagger.compiler)
+
     testImplementation(libs.junit)
+    testImplementation(libs.mockito.core)
+    testImplementation(libs.mockito.kotlin)
+    testImplementation(libs.androidx.core.testing)
+    testImplementation(libs.kotlinx.coroutines.test)
+
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))

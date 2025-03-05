@@ -6,69 +6,45 @@ import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.ViewModelInitializer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
+import com.redron.App
 import com.redron.R
-import com.redron.data.datasource.local.CacheJokesDataSourceImpl
-import com.redron.data.datasource.remote.RetrofitInstance
-import com.redron.data.datasource.local.LocalJokesDataSourceImpl
-import com.redron.data.datasource.remote.RemoteJokesDataSourceImpl
-import com.redron.data.datasource.local.JokesDatabase
-import com.redron.data.repository.JokesRepositoryImpl
 import com.redron.databinding.FragmentListBinding
-import com.redron.domain.usecases.AddJokeUseCase
-import com.redron.domain.usecases.AddJokesUseCase
-import com.redron.domain.usecases.ClearLoadedJokesUseCase
-import com.redron.domain.usecases.LoadJokesLocalUseCase
-import com.redron.domain.usecases.LoadJokesFromCacheUseCase
-import com.redron.domain.usecases.LoadJokesFromNetUseCase
 import com.redron.presentation.main.recycler.JokesListAdapter
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 class ListFragment : Fragment(R.layout.fragment_list) {
 
     private lateinit var binding: FragmentListBinding
 
+    @Inject
+    lateinit var viewModelFactory: JokesListViewModelFactory
 
     private val viewModel: JokesListViewModel by viewModels(
         ownerProducer = { requireActivity() },
-        factoryProducer = {
-            ViewModelProvider.Factory.from(
-                ViewModelInitializer(
-                    clazz = JokesListViewModel::class.java,
-                    initializer = {
-                        val repository = JokesRepositoryImpl(
-                            CacheJokesDataSourceImpl(JokesDatabase.INSTANCE!!),
-                            LocalJokesDataSourceImpl(JokesDatabase.INSTANCE!!),
-                            RemoteJokesDataSourceImpl(RetrofitInstance.retrofitClient)
-                        )
-                        JokesListViewModel(
-                            LoadJokesLocalUseCase(repository),
-                            AddJokeUseCase(repository),
-                            AddJokesUseCase(repository),
-                            LoadJokesFromCacheUseCase(repository),
-                            ClearLoadedJokesUseCase(repository),
-                            LoadJokesFromNetUseCase(repository)
-                        )
-                    }
-                )
-            )
-        }
+        factoryProducer = { viewModelFactory },
     )
 
-    private val adapter = JokesListAdapter {
-        findNavController().navigate(
-            ListFragmentDirections.actionListFragmentToJokeDetailsFragment(it)
-        )
-    }
+    private val adapter = JokesListAdapter(
+        clickListener = {
+            findNavController().navigate(
+                ListFragmentDirections.actionListFragmentToJokeDetailsFragment(it)
+            )
+        },
+
+        favClickListener = {
+            viewModel.onFavClicked(it)
+        }
+    )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        (requireActivity().application as App).appComponent.inject(this)
         viewModel.clearLoaded()
 
         savedInstanceState ?: run {
@@ -76,18 +52,15 @@ class ListFragment : Fragment(R.layout.fragment_list) {
         }
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        binding = FragmentListBinding.bind(view)
-        binding.recyclerView.adapter = adapter
-        binding.recyclerView.layoutManager = LinearLayoutManager(activity)
-        binding.addFragmentButton.setOnClickListener {
+    private fun setOnAddJokeButtonClickListener() {
+        binding.addJokeButton.setOnClickListener {
             findNavController().navigate(
                 ListFragmentDirections.actionListFragmentToAddJokeFragment()
             )
         }
+    }
 
+    private fun addOnRecyclerViewScrollListener() {
         binding.recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
@@ -97,15 +70,28 @@ class ListFragment : Fragment(R.layout.fragment_list) {
                 }
             }
         })
-
-        initViewModel()
     }
 
-    private fun initViewModel() {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        binding = FragmentListBinding.bind(view)
+        binding.recyclerView.adapter = adapter
+
+        addOnRecyclerViewScrollListener()
+
+        setOnAddJokeButtonClickListener()
+
+        collectViewModelState()
+    }
+
+    private fun collectViewModelState() {
+
         lifecycleScope.launch {
-            viewModel.jokes.collect {
-                adapter.submitList(it)
-                binding.textView.visibility = if (it.isEmpty()) View.VISIBLE else View.GONE
+            viewModel.jokesState.collect {
+                binding.progressBar.visibility = if (it.isLoading) View.VISIBLE else View.GONE
+                adapter.submitList(it.jokes)
+                binding.textView.visibility = if (it.jokes.isEmpty()) View.VISIBLE else View.GONE
             }
         }
 
@@ -118,19 +104,16 @@ class ListFragment : Fragment(R.layout.fragment_list) {
         }
 
         lifecycleScope.launch {
-            viewModel.isLoading.collect {
-                binding.progressBar.visibility = if (it) View.VISIBLE else View.GONE
-            }
-        }
-
-        lifecycleScope.launch {
             viewModel.isLoadFromCache.collect {
                 if (it)
                     Snackbar.make(
                         binding.root,
                         requireActivity().getString(R.string.is_load_from_cache_true),
                         Snackbar.LENGTH_SHORT
-                    ).show()
+                    ).apply {
+                        setGestureInsetBottomIgnored(false)
+                        show()
+                    }
             }
         }
     }

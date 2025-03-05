@@ -5,9 +5,8 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/purple_100"
-    android:paddingHorizontal="20dp"
-    android:paddingVertical="6dp"
+    android:background="@color/grey_900"
+    android:padding="10dp"
     tools:context=".presentation.main.ListFragment">
 
     <TextView
@@ -15,12 +14,27 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/no_jokes_text"
+        android:textColor="@color/green_100"
         android:textSize="20sp"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="25dp"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintBottom_toTopOf="@+id/addJokeButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"
+        tools:listitem="@layout/joke_item" />
 
     <ProgressBar
         android:id="@+id/progressBar"
@@ -34,25 +48,12 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:layout_constraintBottom_toTopOf="@+id/addFragmentButton"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0"
-        tools:listitem="@layout/joke_item" />
-
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/addFragmentButton"
+        android:id="@+id/addJokeButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="4dp"
-        android:backgroundTint="@color/purple_200"
+        android:backgroundTint="@color/green_300"
         android:contentDescription="@string/floating_button_content"
         android:src="@drawable/ic_floating_button_plus"
         app:elevation="3dp"

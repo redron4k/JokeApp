@@ -5,63 +5,66 @@ import androidx.lifecycle.viewModelScope
 import com.redron.domain.entity.Joke
 import com.redron.domain.usecases.AddJokeUseCase
 import com.redron.domain.usecases.AddJokesUseCase
+import com.redron.domain.usecases.AddToFavoritesUseCase
 import com.redron.domain.usecases.ClearLoadedJokesUseCase
-import com.redron.domain.usecases.LoadJokesLocalUseCase
-import com.redron.domain.usecases.LoadJokesFromCacheUseCase
 import com.redron.domain.usecases.LoadJokesFromNetUseCase
+import com.redron.domain.usecases.LoadJokesLocalUseCase
+import com.redron.domain.usecases.RefreshCacheUseCase
+import com.redron.domain.usecases.RemoveFromFavoritesUseCase
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.util.concurrent.TimeUnit
+import javax.inject.Inject
 
-class JokesListViewModel(
+class JokesListViewModel @Inject constructor(
     private val loadJokesLocal: LoadJokesLocalUseCase,
     private val addJoke: AddJokeUseCase,
     private val addJokes: AddJokesUseCase,
-    private val loadJokesFromCache: LoadJokesFromCacheUseCase,
     private val clearLoadedJokes: ClearLoadedJokesUseCase,
-    private val loadJokesFromNet: LoadJokesFromNetUseCase
+    private val loadJokesFromNet: LoadJokesFromNetUseCase,
+    private val addToFavorites: AddToFavoritesUseCase,
+    private val removeFromFavorites: RemoveFromFavoritesUseCase,
+    private val refreshCache: RefreshCacheUseCase,
 ) : ViewModel() {
 
-    private val _jokes = MutableStateFlow<List<Joke>>(emptyList())
-    val jokes: StateFlow<List<Joke>> = _jokes
+    private val _jokesState = MutableStateFlow(JokesListState())
+    val jokesState: StateFlow<JokesListState> = _jokesState.asStateFlow()
 
-    private val _error = MutableStateFlow<String?>(null)
-    val error: StateFlow<String?> = _error
-
-    private val _isLoading = MutableStateFlow<Boolean>(false)
-    val isLoading: StateFlow<Boolean> = _isLoading
+    private val _error = MutableSharedFlow<String?>()
+    val error: SharedFlow<String?> = _error.asSharedFlow()
 
     private val _isLoadFromCache = MutableStateFlow<Boolean>(false)
-    val isLoadFromCache: StateFlow<Boolean> = _isLoadFromCache
-
-    private suspend fun loadFromCache() {
-        addJokes(loadJokesFromCache())
-    }
+    val isLoadFromCache: StateFlow<Boolean> = _isLoadFromCache.asStateFlow()
 
     fun initJokes() {
-        if (_isLoading.value) return
-        _isLoading.value = true
+        if (_jokesState.value.isLoading) return
+        _jokesState.value = _jokesState.value.copy(isLoading = true)
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 try {
                     addJokes(loadJokesFromNet())
                     _isLoadFromCache.value = false
                 } catch (_: Exception) {
-                    loadFromCache()
+                    refreshCache()
                     _isLoadFromCache.value = true
                 }
-                _jokes.value = loadJokesLocal()
-                _isLoading.value = false
+                _jokesState.value = _jokesState.value.copy(
+                    jokes = loadJokesLocal(),
+                    isLoading = false
+                )
             }
         }
     }
 
     fun loadMoreJokes() {
-        if (_isLoading.value) return
-        _isLoading.value = true
+        if (_jokesState.value.isLoading) return
+        _jokesState.value = _jokesState.value.copy(isLoading = true)
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 try {
@@ -69,12 +72,14 @@ class JokesListViewModel(
                     _isLoadFromCache.value = false
                 } catch (_: Exception) {
                     if (!_isLoadFromCache.value) {
-                        loadFromCache()
+                        refreshCache()
                         _isLoadFromCache.value = true
                     }
                 }
-                _jokes.value = loadJokesLocal()
-                _isLoading.value = false
+                _jokesState.value = _jokesState.value.copy(
+                    jokes = loadJokesLocal(),
+                    isLoading = false
+                )
             }
         }
     }
@@ -83,7 +88,7 @@ class JokesListViewModel(
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 addJoke(joke)
-                _jokes.value = loadJokesLocal()
+                _jokesState.value = _jokesState.value.copy(jokes = loadJokesLocal())
             }
         }
     }
@@ -95,4 +100,22 @@ class JokesListViewModel(
             }
         }
     }
+
+    fun onFavClicked(joke: Joke) {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                if (joke.isFavorite) {
+                    removeFromFavorites(joke.uuid)
+                } else {
+                    addToFavorites(joke.uuid)
+                }
+                _jokesState.value = _jokesState.value.copy(jokes = loadJokesLocal())
+            }
+        }
+    }
+
+    data class JokesListState(
+        val jokes: List<Joke> = emptyList(),
+        val isLoading: Boolean = false,
+    )
 }

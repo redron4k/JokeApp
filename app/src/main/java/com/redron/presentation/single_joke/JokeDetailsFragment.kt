@@ -7,49 +7,33 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.viewmodel.ViewModelInitializer
 import androidx.navigation.fragment.navArgs
+import com.redron.App
 import com.redron.R
-import com.redron.data.datasource.local.CacheJokesDataSourceImpl
 import com.redron.domain.entity.Joke
-import com.redron.data.datasource.remote.RetrofitInstance
-import com.redron.data.datasource.local.LocalJokesDataSourceImpl
-import com.redron.data.datasource.remote.RemoteJokesDataSourceImpl
-import com.redron.data.datasource.local.JokesDatabase
-import com.redron.data.repository.JokesRepositoryImpl
 import com.redron.databinding.FragmentJokeDetailsBinding
-import com.redron.domain.usecases.GetJokeUseCase
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 class JokeDetailsFragment : Fragment() {
 
-    private lateinit var binding: FragmentJokeDetailsBinding
+    private var _binding: FragmentJokeDetailsBinding? = null
+    private val binding get() = _binding!!
 
-    private val viewModel: JokeDetailsViewModel by viewModels {
-        ViewModelProvider.Factory.from(
-            ViewModelInitializer(
-                clazz = JokeDetailsViewModel::class.java,
-                initializer = {
-                    val repository = JokesRepositoryImpl(
-                        CacheJokesDataSourceImpl(JokesDatabase.INSTANCE!!),
-                        LocalJokesDataSourceImpl(JokesDatabase.INSTANCE!!),
-                        RemoteJokesDataSourceImpl(RetrofitInstance.retrofitClient)
-                    )
-                    JokeDetailsViewModel(
-                        GetJokeUseCase(repository)
-                    )
-                }
-            )
-        )
-    }
+    @Inject
+    lateinit var viewModelFactory: JokeDetailsViewModelFactory
+
+    private val viewModel: JokeDetailsViewModel by viewModels(
+        factoryProducer = { viewModelFactory },
+    )
+
     private val args: JokeDetailsFragmentArgs by navArgs()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        initViewModel()
+        (requireActivity().application as App).appComponent.inject(this)
     }
 
     override fun onCreateView(
@@ -57,16 +41,20 @@ class JokeDetailsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         val view = inflater.inflate(R.layout.fragment_joke_details, container, false)
-        binding = FragmentJokeDetailsBinding.bind(view)
         return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        _binding = FragmentJokeDetailsBinding.bind(view)
+
+        collectViewModelState()
+
         viewModel.loadSingleJoke(args.jokeID)
     }
 
-    private fun initViewModel() {
+    private fun collectViewModelState() {
         lifecycleScope.launch {
             viewModel.joke.collect {
                 it?.let { setUpJoke(it) }
@@ -94,5 +82,10 @@ class JokeDetailsFragment : Fragment() {
                     activity?.getString(R.string.is_from_net_false)
             }
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

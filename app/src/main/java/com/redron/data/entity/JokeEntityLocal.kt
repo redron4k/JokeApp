@@ -4,9 +4,9 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "jokesTemp")
-data class JokeTempEntity(
-    @PrimaryKey()
+@Entity(tableName = "jokes")
+data class JokeEntityLocal(
+    @PrimaryKey
     @ColumnInfo("id")
     val uuid: String,
     @ColumnInfo("setup")
@@ -15,6 +15,8 @@ data class JokeTempEntity(
     val delivery: String,
     @ColumnInfo("category")
     val category: String,
-    @ColumnInfo("dumpTime")
-    val dumpTime: Long
+    @ColumnInfo("isFromNet")
+    val isFromNet: Boolean = true,
+    @ColumnInfo("isFavorite")
+    val isFavorite: Boolean = false,
 )
